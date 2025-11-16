@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Máy tính lỗ lãi trên sàn TMĐT</title>
+  <title>Tính nhanh lỗ lãi sàn TMĐT by Lỗ Vũ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -13,6 +13,7 @@
       --red-bg: #fce8e6;
       --red-text: #b3261e;
       --card-radius: 10px;
+      --primary: #0b57d0;
     }
     * { box-sizing: border-box; }
     body {
@@ -30,10 +31,11 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.06);
     }
     h1 {
-      font-size: 20px;
+      font-size: 21px;
       margin-top: 0;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       text-align: center;
+      letter-spacing: 0.01em;
     }
     .subtitle {
       text-align: center;
@@ -71,7 +73,7 @@
       background: #fafafa;
     }
     .input-group input:focus {
-      border-color: #0b57d0;
+      border-color: var(--primary);
       box-shadow: 0 0 0 2px rgba(11,87,208,0.15);
       background: #ffffff;
     }
@@ -201,10 +203,42 @@
       color: #777;
     }
 
+    /* CTA */
+    .cta {
+      margin-top: 18px;
+      text-align: center;
+    }
+    .cta-text {
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(11,87,208,0.35);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+    }
+    .cta-button:hover {
+      background: #0a4ab5;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(11,87,208,0.35);
+    }
+    .cta-button:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 4px rgba(11,87,208,0.25);
+    }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .container { padding: 12px 12px 18px; }
-      h1 { font-size: 18px; }
+      h1 { font-size: 19px; }
       .inputs { flex-direction: column; align-items: stretch; }
       .input-group { max-width: 100%; }
       .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -220,7 +254,7 @@
 </head>
 <body>
 <div class="container">
-  <h1>Máy tính lỗ lãi trên sàn TMĐT</h1>
+  <h1>Tính nhanh lỗ lãi sàn TMĐT by Lỗ Vũ</h1>
   <div class="subtitle">
     Phí sàn 20% • Thuế 1,5% • Vận hành 10% • Quảng cáo 10% • Hạ tầng 5.000đ/đơn • HHLK: 3% – 5% – 8% – 10%
   </div>
@@ -335,6 +369,14 @@
   <div class="note">
     • Biên lợi nhuận (%) tính trên giá bán B. Ví dụ: lãi 10.000 trên giá bán 200.000 thì % ≈ 5%.<br>
     • Khi gõ 100000 phần mềm sẽ hiển thị 100.000 để hạn chế nhầm số 0.
+  </div>
+
+  <!-- CTA to nguoibanlo.vn -->
+  <div class="cta">
+    <div class="cta-text">Muốn đào sâu thêm về chiến lược & vận hành trên sàn?</div>
+    <a class="cta-button" href="https://nguoibanlo.vn" target="_blank" rel="noopener noreferrer">
+      Đọc thêm các bài viết về TMĐT của Lỗ Vũ
+    </a>
   </div>
 </div>
 
