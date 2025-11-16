@@ -53,6 +53,7 @@
       border-radius: 4px;
       border: 1px solid #ccc;
       outline: none;
+      text-align: right; /* canh phải cho dễ nhìn tiền */
     }
     .input-group input:focus {
       border-color: #007bff;
@@ -142,11 +143,12 @@
   <div class="inputs">
     <div class="input-group">
       <label for="costPrice">Giá vốn (A)</label>
-      <input id="costPrice" type="number" step="0.01" placeholder="Nhập giá vốn" value="100000">
+      <!-- đổi type=number -> text để tự format dấu chấm -->
+      <input id="costPrice" type="text" inputmode="numeric" placeholder="Nhập giá vốn" value="100000">
     </div>
     <div class="input-group">
       <label for="salePrice">Giá bán (B)</label>
-      <input id="salePrice" type="number" step="0.01" placeholder="Nhập giá bán" value="200000">
+      <input id="salePrice" type="text" inputmode="numeric" placeholder="Nhập giá bán" value="200000">
     </div>
   </div>
 
@@ -197,7 +199,7 @@
 
   <div class="note">
     • Biên lợi nhuận (%) tính trên giá bán B. Ví dụ: lãi 10.000 trên giá bán 200.000 thì % = 5%.<br>
-    • Nếu bạn đang dùng đơn vị “nghìn đồng” thay vì “đồng”, hãy chỉnh lại phí hạ tầng trong phần CONFIG cho phù hợp.
+    • Ô nhập tiền có thể gõ 100000, phần mềm sẽ tự hiện 100.000 cho dễ đọc.
   </div>
 </div>
 
@@ -240,6 +242,23 @@
     return value.toLocaleString('vi-VN', { maximumFractionDigits: 0 });
   }
 
+  // Lấy số nguyên từ chuỗi đã có dấu chấm / ký tự khác
+  function getNumericFromFormatted(str) {
+    const digits = (str || '').replace(/\D/g, '');
+    return digits ? parseInt(digits, 10) : 0;
+  }
+
+  // Format ô input: 100000 -> "100.000"
+  function formatInput(el) {
+    const num = getNumericFromFormatted(el.value);
+    if (num === 0) {
+      el.value = '';
+      return 0;
+    }
+    el.value = num.toLocaleString('vi-VN');
+    return num;
+  }
+
   // Hiển thị: "10.000 (5%)"
   function formatProfitWithMargin(profit, salePrice) {
     if (!isFinite(profit)) return '';
@@ -262,70 +281,4 @@
     }
 
     if (profit < 0) {
-      cell.classList.add('pl-neg');      // Lỗ
-    } else if (profit === 0 || margin < 0.03) {
-      cell.classList.add('pl-low');      // Hòa vốn / lãi < 3%
-    } else {
-      cell.classList.add('pl-pos');      // Lãi >= 3%
-    }
-
-    cell.textContent = formatProfitWithMargin(profit, salePrice);
-  }
-
-  function recalc() {
-    const A = parseFloat(costInput.value) || 0; // Giá vốn
-    const B = parseFloat(saleInput.value) || 0; // Giá bán
-
-    const feePlatform = B * CONFIG.platformFeeRate;
-    const feeTax      = B * CONFIG.taxRate;
-    const feeOperate  = B * CONFIG.operationRate;
-    const feeAds      = B * CONFIG.adsRate;
-    const feeInfra    = CONFIG.infraFee;
-
-    // Lãi KHÔNG ADS, KHÔNG HHLK
-    const profitNoAdsNoAff = B - A - feePlatform - feeTax - feeOperate - feeInfra;
-
-    // Lãi FULL ADS, KHÔNG HHLK
-    const profitAdsNoAff = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra;
-
-    // Lãi FULL ADS, HHLK 3%
-    const feeAff3 = B * CONFIG.aff3Rate;
-    const profitAdsAff3 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff3;
-
-    // Lãi FULL ADS, HHLK 5%
-    const feeAff5 = B * CONFIG.aff5Rate;
-    const profitAdsAff5 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff5;
-
-    // Lãi FULL ADS, HHLK 8%
-    const feeAff8 = B * CONFIG.aff8Rate;
-    const profitAdsAff8 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff8;
-
-    // Lãi FULL ADS, HHLK 10%
-    const feeAff10 = B * CONFIG.aff10Rate;
-    const profitAdsAff10 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff10;
-
-    // Đổ số
-    cellA.textContent = formatNumber(A);
-    cellB.textContent = formatNumber(B);
-    cellC.textContent = formatNumber(feePlatform);
-    cellD.textContent = formatNumber(feeTax);
-    cellE.textContent = formatNumber(feeOperate);
-    cellF.textContent = formatNumber(feeAds);
-    cellG.textContent = formatNumber(feeInfra);
-
-    setProfitCell(cellProfitNoAdsNoAff, profitNoAdsNoAff, B);
-    setProfitCell(cellProfitAdsNoAff,   profitAdsNoAff,   B);
-    setProfitCell(cellProfitAdsAff3,    profitAdsAff3,    B);
-    setProfitCell(cellProfitAdsAff5,    profitAdsAff5,    B);
-    setProfitCell(cellProfitAdsAff8,    profitAdsAff8,    B);
-    setProfitCell(cellProfitAdsAff10,   profitAdsAff10,   B);
-  }
-
-  costInput.addEventListener('input', recalc);
-  saleInput.addEventListener('input', recalc);
-
-  // Tính lần đầu
-  recalc();
-</script>
-</body>
-</html>
+      cell.classList.ad
