@@ -102,6 +102,55 @@
       border: 1px solid rgba(0,0,0,0.1);
     }
 
+    /* FEES PANEL */
+    .fees-panel {
+      margin-top: 14px;
+      padding: 10px 10px 12px;
+      border-radius: 10px;
+      background: #f7f9ff;
+      border: 1px dashed #c5d0ff;
+    }
+    .fees-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #3b4a9a;
+    }
+    .fees-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .fees-group {
+      flex: 1 1 140px;
+      min-width: 140px;
+    }
+    .fees-group label {
+      font-size: 11px;
+      margin-bottom: 2px;
+      display: block;
+      color: #555;
+    }
+    .fees-group input {
+      width: 100%;
+      padding: 5px 6px;
+      font-size: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      text-align: right;
+      outline: none;
+      background: #fff;
+    }
+    .fees-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(11,87,208,0.2);
+    }
+    .fees-note {
+      margin-top: 6px;
+      font-size: 10px;
+      color: #777;
+    }
+
     /* SUMMARY CARDS */
     .summary-section-title {
       margin-top: 16px;
@@ -246,9 +295,9 @@
       th, td { padding: 4px 2px; }
       .table-hint { font-size: 10px; }
     }
-
     @media (max-width: 480px) {
       .cards-grid { grid-template-columns: 1fr; }
+      .fees-group { flex: 1 1 100%; }
     }
   </style>
 </head>
@@ -256,7 +305,12 @@
 <div class="container">
   <h1>Tính nhanh lỗ lãi sàn TMĐT by Lỗ Vũ</h1>
   <div class="subtitle">
-    Phí sàn 20% • Thuế 1,5% • Vận hành 10% • Quảng cáo 10% • Hạ tầng 5.000đ/đơn • HHLK: 3% – 5% – 8% – 10%
+    Phí sàn <span id="labelPlatformPercent">20</span>% •
+    Thuế <span id="labelTaxPercent">1,5</span>% •
+    Vận hành <span id="labelOperatePercent">10</span>% •
+    Quảng cáo <span id="labelAdsPercent">10</span>% •
+    Hạ tầng <span id="labelInfraAmount">5.000</span>đ/đơn •
+    <span id="labelAffSummary">HHLK: 3% – 5% – 8% – 10%</span>
   </div>
 
   <!-- INPUTS -->
@@ -278,6 +332,52 @@
     <span><span class="color-box" style="background:#fce8e6;"></span>🔴 Lỗ</span>
   </div>
 
+  <!-- FEES CUSTOMIZATION -->
+  <div class="fees-panel">
+    <div class="fees-title">Tùy chỉnh phí (nâng cao – không bắt buộc)</div>
+    <div class="fees-grid">
+      <div class="fees-group">
+        <label for="platformFeeInput">Phí sàn (%)</label>
+        <input id="platformFeeInput" type="number" step="0.1" min="0" max="50">
+      </div>
+      <div class="fees-group">
+        <label for="taxRateInput">Thuế (%)</label>
+        <input id="taxRateInput" type="number" step="0.1" min="0" max="20">
+      </div>
+      <div class="fees-group">
+        <label for="operationRateInput">Vận hành (%)</label>
+        <input id="operationRateInput" type="number" step="0.1" min="0" max="50">
+      </div>
+      <div class="fees-group">
+        <label for="adsRateInput">Quảng cáo (%)</label>
+        <input id="adsRateInput" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="fees-group">
+        <label for="infraFeeInput">Hạ tầng (đ/đơn)</label>
+        <input id="infraFeeInput" type="number" step="100" min="0">
+      </div>
+      <div class="fees-group">
+        <label for="aff3Input">HHLK mức 1 (%)</label>
+        <input id="aff3Input" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="fees-group">
+        <label for="aff5Input">HHLK mức 2 (%)</label>
+        <input id="aff5Input" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="fees-group">
+        <label for="aff8Input">HHLK mức 3 (%)</label>
+        <input id="aff8Input" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="fees-group">
+        <label for="aff10Input">HHLK mức 4 (%)</label>
+        <input id="aff10Input" type="number" step="0.1" min="0" max="100">
+      </div>
+    </div>
+    <div class="fees-note">
+      Các giá trị này chỉ dùng trên trình duyệt của bạn và sẽ được lưu lại (local storage) để lần sau mở lại vẫn giữ cấu hình phí.
+    </div>
+  </div>
+
   <!-- SUMMARY CARDS -->
   <div class="summary-section-title">Kết quả nhanh theo từng kịch bản</div>
   <div class="cards-grid">
@@ -297,22 +397,22 @@
       <div class="card-note">Có quảng cáo, chưa chia hoa hồng liên kết.</div>
     </div>
     <div class="card">
-      <div class="card-title">FULL ADS, HHLK 3%</div>
+      <div class="card-title aff3-label">FULL ADS, HHLK 3%</div>
       <div id="cardProfitAdsAff3" class="card-profit pl-cell"></div>
       <div class="card-note">Kịch bản HHLK nhẹ, thường áp cho KOC nhỏ.</div>
     </div>
     <div class="card">
-      <div class="card-title">FULL ADS, HHLK 5%</div>
+      <div class="card-title aff5-label">FULL ADS, HHLK 5%</div>
       <div id="cardProfitAdsAff5" class="card-profit pl-cell"></div>
       <div class="card-note">Mức hoa hồng phổ biến cho KOL/KOC.</div>
     </div>
     <div class="card">
-      <div class="card-title">FULL ADS, HHLK 8%</div>
+      <div class="card-title aff8-label">FULL ADS, HHLK 8%</div>
       <div id="cardProfitAdsAff8" class="card-profit pl-cell"></div>
       <div class="card-note">Kịch bản ưu đãi mạnh cho đối tác.</div>
     </div>
     <div class="card">
-      <div class="card-title">FULL ADS, HHLK 10%</div>
+      <div class="card-title aff10-label">FULL ADS, HHLK 10%</div>
       <div id="cardProfitAdsAff10" class="card-profit pl-cell"></div>
       <div class="card-note">Mức hoa hồng rất cao, cần kiểm soát kỹ.</div>
     </div>
@@ -338,10 +438,10 @@
           <th class="sticky">Lãi<br>XẢ HÀNG</th>
           <th class="sticky">Lãi<br>KHÔNG ADS,<br>KHÔNG HHLK</th>
           <th class="sticky">Lãi<br>FULL ADS,<br>KHÔNG HHLK</th>
-          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 3%</th>
-          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 5%</th>
-          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 8%</th>
-          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 10%</th>
+          <th class="sticky aff3-header">Lãi<br>FULL ADS,<br>HHLK 3%</th>
+          <th class="sticky aff5-header">Lãi<br>FULL ADS,<br>HHLK 5%</th>
+          <th class="sticky aff8-header">Lãi<br>FULL ADS,<br>HHLK 8%</th>
+          <th class="sticky aff10-header">Lãi<br>FULL ADS,<br>HHLK 10%</th>
         </tr>
         </thead>
         <tbody>
@@ -382,17 +482,40 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const CONFIG = {
+    const STORAGE_KEY = 'loilai_fee_config_v1';
+
+    const DEFAULT_CONFIG = {
       platformFeeRate: 0.20,  // 20% phí sàn
-      taxRate: 0.015,
-      operationRate: 0.10,
-      adsRate: 0.10,
+      taxRate: 0.015,         // 1.5%
+      operationRate: 0.10,    // 10%
+      adsRate: 0.10,          // 10%
       infraFee: 5000,
       aff3Rate: 0.03,
       aff5Rate: 0.05,
       aff8Rate: 0.08,
       aff10Rate: 0.10
     };
+
+    let CONFIG = { ...DEFAULT_CONFIG };
+
+    function loadConfigFromStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        CONFIG = { ...CONFIG, ...saved };
+      } catch (e) {
+        console.warn('Cannot load config from storage', e);
+      }
+    }
+
+    function saveConfigToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(CONFIG));
+      } catch (e) {
+        console.warn('Cannot save config to storage', e);
+      }
+    }
 
     const costInput = document.getElementById('costPrice');
     const saleInput = document.getElementById('salePrice');
@@ -421,9 +544,30 @@
     const cardProfitAdsAff8     = document.getElementById('cardProfitAdsAff8');
     const cardProfitAdsAff10    = document.getElementById('cardProfitAdsAff10');
 
+    const platformFeeInput   = document.getElementById('platformFeeInput');
+    const taxRateInput       = document.getElementById('taxRateInput');
+    const operationRateInput = document.getElementById('operationRateInput');
+    const adsRateInput       = document.getElementById('adsRateInput');
+    const infraFeeInput      = document.getElementById('infraFeeInput');
+    const aff3Input          = document.getElementById('aff3Input');
+    const aff5Input          = document.getElementById('aff5Input');
+    const aff8Input          = document.getElementById('aff8Input');
+    const aff10Input         = document.getElementById('aff10Input');
+
+    const labelPlatformPercent = document.getElementById('labelPlatformPercent');
+    const labelTaxPercent      = document.getElementById('labelTaxPercent');
+    const labelOperatePercent  = document.getElementById('labelOperatePercent');
+    const labelAdsPercent      = document.getElementById('labelAdsPercent');
+    const labelInfraAmount     = document.getElementById('labelInfraAmount');
+    const labelAffSummary      = document.getElementById('labelAffSummary');
+
     function formatNumber(value) {
       if (!isFinite(value)) return '';
       return value.toLocaleString('vi-VN', { maximumFractionDigits: 0 });
+    }
+
+    function formatPercentDisplay(rate) {
+      return (rate * 100).toLocaleString('vi-VN', { maximumFractionDigits: 2 }).replace(/\s/g, '');
     }
 
     function parseMoney(str) {
@@ -475,6 +619,93 @@
       applyProfitStyle(cardEl,  profit, salePrice);
     }
 
+    function updateLabelsFromConfig() {
+      if (labelPlatformPercent) labelPlatformPercent.textContent = formatPercentDisplay(CONFIG.platformFeeRate);
+      if (labelTaxPercent)      labelTaxPercent.textContent      = formatPercentDisplay(CONFIG.taxRate);
+      if (labelOperatePercent)  labelOperatePercent.textContent  = formatPercentDisplay(CONFIG.operationRate);
+      if (labelAdsPercent)      labelAdsPercent.textContent      = formatPercentDisplay(CONFIG.adsRate);
+      if (labelInfraAmount)     labelInfraAmount.textContent     = formatNumber(CONFIG.infraFee);
+
+      const aff3 = formatPercentDisplay(CONFIG.aff3Rate);
+      const aff5 = formatPercentDisplay(CONFIG.aff5Rate);
+      const aff8 = formatPercentDisplay(CONFIG.aff8Rate);
+      const aff10= formatPercentDisplay(CONFIG.aff10Rate);
+
+      if (labelAffSummary) {
+        labelAffSummary.textContent = "HHLK: " + aff3 + "% – " + aff5 + "% – " + aff8 + "% – " + aff10 + "%";
+      }
+
+      document.querySelectorAll('.aff3-label').forEach(el => {
+        el.textContent = "FULL ADS, HHLK " + aff3 + "%";
+      });
+      document.querySelectorAll('.aff5-label').forEach(el => {
+        el.textContent = "FULL ADS, HHLK " + aff5 + "%";
+      });
+      document.querySelectorAll('.aff8-label').forEach(el => {
+        el.textContent = "FULL ADS, HHLK " + aff8 + "%";
+      });
+      document.querySelectorAll('.aff10-label').forEach(el => {
+        el.textContent = "FULL ADS, HHLK " + aff10 + "%";
+      });
+
+      document.querySelectorAll('.aff3-header').forEach(el => {
+        el.innerHTML = "Lãi<br>FULL ADS,<br>HHLK " + aff3 + "%";
+      });
+      document.querySelectorAll('.aff5-header').forEach(el => {
+        el.innerHTML = "Lãi<br>FULL ADS,<br>HHLK " + aff5 + "%";
+      });
+      document.querySelectorAll('.aff8-header').forEach(el => {
+        el.innerHTML = "Lãi<br>FULL ADS,<br>HHLK " + aff8 + "%";
+      });
+      document.querySelectorAll('.aff10-header').forEach(el => {
+        el.innerHTML = "Lãi<br>FULL ADS,<br>HHLK " + aff10 + "%";
+      });
+    }
+
+    function fillFeeInputsFromConfig() {
+      if (platformFeeInput)   platformFeeInput.value   = (CONFIG.platformFeeRate * 100).toString();
+      if (taxRateInput)       taxRateInput.value       = (CONFIG.taxRate * 100).toString();
+      if (operationRateInput) operationRateInput.value = (CONFIG.operationRate * 100).toString();
+      if (adsRateInput)       adsRateInput.value       = (CONFIG.adsRate * 100).toString();
+      if (infraFeeInput)      infraFeeInput.value      = CONFIG.infraFee.toString();
+      if (aff3Input)          aff3Input.value          = (CONFIG.aff3Rate * 100).toString();
+      if (aff5Input)          aff5Input.value          = (CONFIG.aff5Rate * 100).toString();
+      if (aff8Input)          aff8Input.value          = (CONFIG.aff8Rate * 100).toString();
+      if (aff10Input)         aff10Input.value         = (CONFIG.aff10Rate * 100).toString();
+    }
+
+    function parsePercentInput(el, fallback) {
+      if (!el) return fallback;
+      const v = String(el.value || "").replace(',', '.');
+      const num = parseFloat(v);
+      if (!isFinite(num) || num < 0) return fallback;
+      return num / 100;
+    }
+
+    function parseNumberInput(el, fallback) {
+      if (!el) return fallback;
+      const num = parseFloat(el.value);
+      if (!isFinite(num) || num < 0) return fallback;
+      return Math.round(num);
+    }
+
+    function handleFeesChange() {
+      CONFIG.platformFeeRate = parsePercentInput(platformFeeInput, CONFIG.platformFeeRate);
+      CONFIG.taxRate         = parsePercentInput(taxRateInput, CONFIG.taxRate);
+      CONFIG.operationRate   = parsePercentInput(operationRateInput, CONFIG.operationRate);
+      CONFIG.adsRate         = parsePercentInput(adsRateInput, CONFIG.adsRate);
+      CONFIG.infraFee        = parseNumberInput(infraFeeInput, CONFIG.infraFee);
+      CONFIG.aff3Rate        = parsePercentInput(aff3Input, CONFIG.aff3Rate);
+      CONFIG.aff5Rate        = parsePercentInput(aff5Input, CONFIG.aff5Rate);
+      CONFIG.aff8Rate        = parsePercentInput(aff8Input, CONFIG.aff8Rate);
+      CONFIG.aff10Rate       = parsePercentInput(aff10Input, CONFIG.aff10Rate);
+
+      fillFeeInputsFromConfig(); // chuẩn hoá lại số trên ô
+      saveConfigToStorage();
+      updateLabelsFromConfig();
+      recalc();
+    }
+
     function recalc() {
       const A = normalizeInput(costInput);
       const B = normalizeInput(saleInput);
@@ -518,6 +749,21 @@
       updateScenario(cellProfitAdsAff8,    cardProfitAdsAff8,    profitAdsAff8,    B);
       updateScenario(cellProfitAdsAff10,   cardProfitAdsAff10,   profitAdsAff10,   B);
     }
+
+    // ---- Khởi tạo ----
+    loadConfigFromStorage();
+    fillFeeInputsFromConfig();
+    updateLabelsFromConfig();
+
+    if (platformFeeInput)   platformFeeInput.addEventListener('change', handleFeesChange);
+    if (taxRateInput)       taxRateInput.addEventListener('change', handleFeesChange);
+    if (operationRateInput) operationRateInput.addEventListener('change', handleFeesChange);
+    if (adsRateInput)       adsRateInput.addEventListener('change', handleFeesChange);
+    if (infraFeeInput)      infraFeeInput.addEventListener('change', handleFeesChange);
+    if (aff3Input)          aff3Input.addEventListener('change', handleFeesChange);
+    if (aff5Input)          aff5Input.addEventListener('change', handleFeesChange);
+    if (aff8Input)          aff8Input.addEventListener('change', handleFeesChange);
+    if (aff10Input)         aff10Input.addEventListener('change', handleFeesChange);
 
     if (costInput) costInput.addEventListener('input', recalc);
     if (saleInput) saleInput.addEventListener('input', recalc);
