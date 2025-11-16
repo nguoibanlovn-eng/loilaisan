@@ -5,6 +5,18 @@
   <title>Máy tính lỗ lãi sàn TMĐT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    :root {
+      --green-bg: #e6f4ea;
+      --green-text: #137333;
+      --yellow-bg: #fff8e1;
+      --yellow-text: #b05a00;
+      --red-bg: #fce8e6;
+      --red-text: #b3261e;
+      --card-radius: 10px;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f5f5f5;
@@ -15,14 +27,14 @@
       max-width: 1200px;
       margin: 0 auto;
       background: #ffffff;
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 16px 20px 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
     }
     h1 {
       font-size: 20px;
       margin-top: 0;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-align: center;
     }
     .subtitle {
@@ -31,6 +43,8 @@
       color: #666;
       margin-bottom: 16px;
     }
+
+    /* INPUTS */
     .inputs {
       display: flex;
       flex-wrap: wrap;
@@ -41,25 +55,110 @@
     .input-group {
       display: flex;
       flex-direction: column;
-      min-width: 160px;
+      min-width: 180px;
+      flex: 1;
+      max-width: 260px;
     }
     .input-group label {
       font-size: 13px;
       margin-bottom: 4px;
     }
     .input-group input {
-      padding: 6px 8px;
-      font-size: 14px;
-      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 16px;
+      border-radius: 8px;
       border: 1px solid #ccc;
       outline: none;
-      text-align: right; /* canh phải cho dễ nhìn tiền */
+      text-align: right;
+      background: #fafafa;
     }
     .input-group input:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 0 2px rgba(0,123,255,0.15);
+      border-color: #0b57d0;
+      box-shadow: 0 0 0 2px rgba(11,87,208,0.15);
+      background: #ffffff;
     }
 
+    /* LEGEND */
+    .legend {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #555;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 4px;
+    }
+    .color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      margin-right: 4px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* SUMMARY CARDS */
+    .summary-section-title {
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+    .cards-grid {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .card {
+      border-radius: var(--card-radius);
+      padding: 8px 10px;
+      border: 1px solid #eee;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 68px;
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .card-profit {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .card-note {
+      font-size: 10px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    /* Table */
+    .table-wrapper {
+      margin-top: 18px;
+    }
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .table-header span {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+    .table-hint {
+      font-size: 11px;
+      color: #777;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -82,22 +181,20 @@
       z-index: 2;
     }
 
-    .legend {
-      margin-top: 10px;
-      font-size: 11px;
-      color: #555;
+    .pl-cell {
+      font-weight: 500;
     }
-    .legend span {
-      display: inline-flex;
-      align-items: center;
-      margin-right: 12px;
+    .pl-pos {
+      background: var(--green-bg);
+      color: var(--green-text);
     }
-    .color-box {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-      margin-right: 4px;
-      border: 1px solid rgba(0,0,0,0.1);
+    .pl-low {
+      background: var(--yellow-bg);
+      color: var(--yellow-text);
+    }
+    .pl-neg {
+      background: var(--red-bg);
+      color: var(--red-text);
     }
 
     .note {
@@ -106,29 +203,38 @@
       color: #777;
     }
 
-    /* Màu cảnh báo cho ô lãi/lỗ */
-    .pl-cell {
-      font-weight: 500;
-    }
-    .pl-pos {           /* Lãi tốt (>=3%) */
-      background: #e6f4ea;
-      color: #137333;
-    }
-    .pl-low {           /* Hòa vốn hoặc lãi <3% */
-      background: #fff8e1;
-      color: #b05a00;
-    }
-    .pl-neg {           /* Lỗ */
-      background: #fce8e6;
-      color: #b3261e;
-    }
-
+    /* MOBILE */
     @media (max-width: 768px) {
+      .container {
+        padding: 12px 12px 18px;
+      }
+      h1 {
+        font-size: 18px;
+      }
+      .inputs {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .input-group {
+        max-width: 100%;
+      }
+      .cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
       table {
         font-size: 11px;
       }
       th, td {
         padding: 4px 2px;
+      }
+      .table-hint {
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -140,10 +246,10 @@
     Phí sàn 19% • Thuế 1,5% • Vận hành 10% • Quảng cáo 10% • Hạ tầng 5.000đ/đơn • HHLK: 3% – 5% – 8% – 10%
   </div>
 
+  <!-- INPUTS -->
   <div class="inputs">
     <div class="input-group">
       <label for="costPrice">Giá vốn (A)</label>
-      <!-- đổi type=number -> text để tự format dấu chấm -->
       <input id="costPrice" type="text" inputmode="numeric" placeholder="Nhập giá vốn" value="100000">
     </div>
     <div class="input-group">
@@ -152,207 +258,230 @@
     </div>
   </div>
 
+  <!-- LEGEND -->
   <div class="legend">
-    <span><span class="color-box" style="background:#e6f4ea;"></span>🟢 Lãi &nbsp;(≥ 3% doanh thu)</span>
+    <span><span class="color-box" style="background:#e6f4ea;"></span>🟢 Lãi (≥ 3% doanh thu)</span>
     <span><span class="color-box" style="background:#fff8e1;"></span>🟡 Hòa vốn / lãi &lt; 3%</span>
     <span><span class="color-box" style="background:#fce8e6;"></span>🔴 Lỗ</span>
   </div>
 
-  <div style="overflow-x:auto; margin-top: 10px;">
-    <table>
-      <thead>
-      <tr>
-        <th class="sticky">Giá vốn<br>(A)</th>
-        <th class="sticky">Giá bán<br>(B)</th>
-        <th class="sticky">Phí sàn<br>19% (C)</th>
-        <th class="sticky">Thuế<br>1,5% (D)</th>
-        <th class="sticky">Vận hành<br>10% (E)</th>
-        <th class="sticky">Quảng cáo<br>10% (F)</th>
-        <th class="sticky">Hạ tầng<br>5.000đ (G)</th>
-        <th class="sticky">Lãi<br>KHÔNG ADS,<br>KHÔNG HHLK</th>
-        <th class="sticky">Lãi<br>FULL ADS,<br>KHÔNG HHLK</th>
-        <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 3%</th>
-        <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 5%</th>
-        <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 8%</th>
-        <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 10%</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td id="cellA"></td>
-        <td id="cellB"></td>
-        <td id="cellC"></td>
-        <td id="cellD"></td>
-        <td id="cellE"></td>
-        <td id="cellF"></td>
-        <td id="cellG"></td>
-        <td id="cellProfitNoAdsNoAff" class="pl-cell"></td>
-        <td id="cellProfitAdsNoAff" class="pl-cell"></td>
-        <td id="cellProfitAdsAff3" class="pl-cell"></td>
-        <td id="cellProfitAdsAff5" class="pl-cell"></td>
-        <td id="cellProfitAdsAff8" class="pl-cell"></td>
-        <td id="cellProfitAdsAff10" class="pl-cell"></td>
-      </tr>
-      </tbody>
-    </table>
+  <!-- SUMMARY CARDS -->
+  <div class="summary-section-title">Kết quả nhanh theo từng kịch bản</div>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-title">KHÔNG ADS, KHÔNG HHLK</div>
+      <div id="cardProfitNoAdsNoAff" class="card-profit pl-cell"></div>
+      <div class="card-note">Chỉ tính phí sàn, thuế, vận hành, hạ tầng.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">FULL ADS, KHÔNG HHLK</div>
+      <div id="cardProfitAdsNoAff" class="card-profit pl-cell"></div>
+      <div class="card-note">Có quảng cáo, chưa chia hoa hồng liên kết.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">FULL ADS, HHLK 3%</div>
+      <div id="cardProfitAdsAff3" class="card-profit pl-cell"></div>
+      <div class="card-note">Kịch bản HHLK nhẹ, thường áp cho KOC nhỏ.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">FULL ADS, HHLK 5%</div>
+      <div id="cardProfitAdsAff5" class="card-profit pl-cell"></div>
+      <div class="card-note">Mức hoa hồng phổ biến cho KOL/KOC.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">FULL ADS, HHLK 8%</div>
+      <div id="cardProfitAdsAff8" class="card-profit pl-cell"></div>
+      <div class="card-note">Kịch bản ưu đãi mạnh cho đối tác.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">FULL ADS, HHLK 10%</div>
+      <div id="cardProfitAdsAff10" class="card-profit pl-cell"></div>
+      <div class="card-note">Mức hoa hồng rất cao, cần kiểm soát kỹ.</div>
+    </div>
+  </div>
+
+  <!-- DETAIL TABLE -->
+  <div class="table-wrapper">
+    <div class="table-header">
+      <span>Chi tiết phí & lãi</span>
+      <span class="table-hint">Vuốt ngang để xem đủ cột trên màn hình nhỏ.</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+        <tr>
+          <th class="sticky">Giá vốn<br>(A)</th>
+          <th class="sticky">Giá bán<br>(B)</th>
+          <th class="sticky">Phí sàn<br>19% (C)</th>
+          <th class="sticky">Thuế<br>1,5% (D)</th>
+          <th class="sticky">Vận hành<br>10% (E)</th>
+          <th class="sticky">Quảng cáo<br>10% (F)</th>
+          <th class="sticky">Hạ tầng<br>5.000đ (G)</th>
+          <th class="sticky">Lãi<br>KHÔNG ADS,<br>KHÔNG HHLK</th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>KHÔNG HHLK</th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 3%</th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 5%</th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 8%</th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 10%</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td id="cellA"></td>
+          <td id="cellB"></td>
+          <td id="cellC"></td>
+          <td id="cellD"></td>
+          <td id="cellE"></td>
+          <td id="cellF"></td>
+          <td id="cellG"></td>
+          <td id="cellProfitNoAdsNoAff" class="pl-cell"></td>
+          <td id="cellProfitAdsNoAff" class="pl-cell"></td>
+          <td id="cellProfitAdsAff3" class="pl-cell"></td>
+          <td id="cellProfitAdsAff5" class="pl-cell"></td>
+          <td id="cellProfitAdsAff8" class="pl-cell"></td>
+          <td id="cellProfitAdsAff10" class="pl-cell"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="note">
-    • Biên lợi nhuận (%) tính trên giá bán B. Ví dụ: lãi 10.000 trên giá bán 200.000 thì % = 5%.<br>
-    • Ô nhập tiền có thể gõ 100000, phần mềm sẽ tự hiện 100.000 cho dễ đọc.
+    • Biên lợi nhuận (%) tính trên giá bán B. Ví dụ: lãi 10.000 trên giá bán 200.000 thì % ≈ 5%.<br>
+    • Khi gõ 100000 phần mềm sẽ hiển thị 100.000 để hạn chế nhầm số 0.
   </div>
 </div>
 
 <script>
-  // ==========================
-  // CẤU HÌNH TỶ LỆ PHÍ
-  // ==========================
-  const CONFIG = {
-    platformFeeRate: 0.19,   // Phí sàn 19% doanh thu
-    taxRate: 0.015,          // Thuế 1,5% doanh thu
-    operationRate: 0.10,     // Vận hành 10% doanh thu
-    adsRate: 0.10,           // Quảng cáo 10% doanh thu
-    infraFee: 5000,          // Phí hạ tầng cố định 5.000đ/đơn
-    aff3Rate: 0.03,          // HHLK 3%
-    aff5Rate: 0.05,          // HHLK 5%
-    aff8Rate: 0.08,          // HHLK 8%
-    aff10Rate: 0.10          // HHLK 10%
-  };
+  window.addEventListener('DOMContentLoaded', function () {
+    const CONFIG = {
+      platformFeeRate: 0.19,
+      taxRate: 0.015,
+      operationRate: 0.10,
+      adsRate: 0.10,
+      infraFee: 5000,
+      aff3Rate: 0.03,
+      aff5Rate: 0.05,
+      aff8Rate: 0.08,
+      aff10Rate: 0.10
+    };
 
-  const costInput = document.getElementById('costPrice');
-  const saleInput = document.getElementById('salePrice');
+    const costInput = document.getElementById('costPrice');
+    const saleInput = document.getElementById('salePrice');
 
-  const cellA = document.getElementById('cellA');
-  const cellB = document.getElementById('cellB');
-  const cellC = document.getElementById('cellC');
-  const cellD = document.getElementById('cellD');
-  const cellE = document.getElementById('cellE');
-  const cellF = document.getElementById('cellF');
-  const cellG = document.getElementById('cellG');
+    const cellA = document.getElementById('cellA');
+    const cellB = document.getElementById('cellB');
+    const cellC = document.getElementById('cellC');
+    const cellD = document.getElementById('cellD');
+    const cellE = document.getElementById('cellE');
+    const cellF = document.getElementById('cellF');
+    const cellG = document.getElementById('cellG');
 
-  const cellProfitNoAdsNoAff = document.getElementById('cellProfitNoAdsNoAff');
-  const cellProfitAdsNoAff   = document.getElementById('cellProfitAdsNoAff');
-  const cellProfitAdsAff3    = document.getElementById('cellProfitAdsAff3');
-  const cellProfitAdsAff5    = document.getElementById('cellProfitAdsAff5');
-  const cellProfitAdsAff8    = document.getElementById('cellProfitAdsAff8');
-  const cellProfitAdsAff10   = document.getElementById('cellProfitAdsAff10');
+    const cellProfitNoAdsNoAff = document.getElementById('cellProfitNoAdsNoAff');
+    const cellProfitAdsNoAff   = document.getElementById('cellProfitAdsNoAff');
+    const cellProfitAdsAff3    = document.getElementById('cellProfitAdsAff3');
+    const cellProfitAdsAff5    = document.getElementById('cellProfitAdsAff5');
+    const cellProfitAdsAff8    = document.getElementById('cellProfitAdsAff8');
+    const cellProfitAdsAff10   = document.getElementById('cellProfitAdsAff10');
 
-  function formatNumber(value) {
-    if (!isFinite(value)) return '';
-    return value.toLocaleString('vi-VN', { maximumFractionDigits: 0 });
-  }
+    const cardProfitNoAdsNoAff = document.getElementById('cardProfitNoAdsNoAff');
+    const cardProfitAdsNoAff   = document.getElementById('cardProfitAdsNoAff');
+    const cardProfitAdsAff3    = document.getElementById('cardProfitAdsAff3');
+    const cardProfitAdsAff5    = document.getElementById('cardProfitAdsAff5');
+    const cardProfitAdsAff8    = document.getElementById('cardProfitAdsAff8');
+    const cardProfitAdsAff10   = document.getElementById('cardProfitAdsAff10');
 
-  // Lấy số nguyên từ chuỗi đã có dấu chấm / ký tự khác
-  function getNumericFromFormatted(str) {
-    const digits = (str || '').replace(/\D/g, '');
-    return digits ? parseInt(digits, 10) : 0;
-  }
-
-  // Format ô input: 100000 -> "100.000"
-  function formatInput(el) {
-    const num = getNumericFromFormatted(el.value);
-    if (num === 0) {
-      el.value = '';
-      return 0;
-    }
-    el.value = num.toLocaleString('vi-VN');
-    return num;
-  }
-
-  // Hiển thị: "10.000 (5%)"
-  function formatProfitWithMargin(profit, salePrice) {
-    if (!isFinite(profit)) return '';
-    const base = parseFloat(salePrice) || 0;
-    let text = formatNumber(profit);
-    if (base > 0) {
-      const margin = profit / base * 100;
-      text += " (" + margin.toFixed(1) + "%)";
-    }
-    return text;
-  }
-
-  // Gán màu theo lãi/lỗ & % lãi trên doanh thu
-  function setProfitCell(cell, profit, salePrice) {
-    cell.classList.remove('pl-pos','pl-low','pl-neg');
-    const base = parseFloat(salePrice) || 0;
-    let margin = 0;
-    if (base > 0) {
-      margin = profit / base;
+    function formatNumber(value) {
+      if (!isFinite(value)) return '';
+      return value.toLocaleString('vi-VN', { maximumFractionDigits: 0 });
     }
 
-    if (profit < 0) {
-      cell.classList.add('pl-neg');      // Lỗ
-    } else if (profit === 0 || margin < 0.03) {
-      cell.classList.add('pl-low');      // Hòa vốn / lãi < 3%
-    } else {
-      cell.classList.add('pl-pos');      // Lãi >= 3%
+    function parseMoney(str) {
+      const digits = String(str || '').replace(/\D/g, '');
+      return digits ? parseInt(digits, 10) : 0;
     }
 
-    cell.textContent = formatProfitWithMargin(profit, salePrice);
-  }
+    function normalizeInput(el) {
+      const num = parseMoney(el.value);
+      if (num === 0) {
+        el.value = '';
+        return 0;
+      }
+      el.value = num.toLocaleString('vi-VN');
+      return num;
+    }
 
-  function recalc() {
-    // Lấy số đã bóc dấu chấm
-    const A = getNumericFromFormatted(costInput.value); // Giá vốn
-    const B = getNumericFromFormatted(saleInput.value); // Giá bán
+    function formatProfitWithMargin(profit, salePrice) {
+      if (!isFinite(profit)) return '';
+      const base = salePrice || 0;
+      let text = formatNumber(profit);
+      if (base > 0) {
+        const margin = profit / base * 100;
+        text += " (" + margin.toFixed(1) + "%)";
+      }
+      return text;
+    }
 
-    const feePlatform = B * CONFIG.platformFeeRate;
-    const feeTax      = B * CONFIG.taxRate;
-    const feeOperate  = B * CONFIG.operationRate;
-    const feeAds      = B * CONFIG.adsRate;
-    const feeInfra    = CONFIG.infraFee;
+    function setProfitVisual(cell, profit, salePrice) {
+      cell.classList.remove('pl-pos','pl-low','pl-neg');
+      const base = salePrice || 0;
+      let margin = 0;
+      if (base > 0) margin = profit / base;
 
-    // Lãi KHÔNG ADS, KHÔNG HHLK
-    const profitNoAdsNoAff = B - A - feePlatform - feeTax - feeOperate - feeInfra;
+      if (profit < 0) {
+        cell.classList.add('pl-neg');
+      } else if (profit === 0 || margin < 0.03) {
+        cell.classList.add('pl-low');
+      } else {
+        cell.classList.add('pl-pos');
+      }
+      cell.textContent = formatProfitWithMargin(profit, salePrice);
+    }
 
-    // Lãi FULL ADS, KHÔNG HHLK
-    const profitAdsNoAff = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra;
+    function recalc() {
+      const A = normalizeInput(costInput);
+      const B = normalizeInput(saleInput);
 
-    // Lãi FULL ADS, HHLK 3%
-    const feeAff3 = B * CONFIG.aff3Rate;
-    const profitAdsAff3 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff3;
+      const feePlatform = B * CONFIG.platformFeeRate;
+      const feeTax      = B * CONFIG.taxRate;
+      const feeOperate  = B * CONFIG.operationRate;
+      const feeAds      = B * CONFIG.adsRate;
+      const feeInfra    = CONFIG.infraFee;
 
-    // Lãi FULL ADS, HHLK 5%
-    const feeAff5 = B * CONFIG.aff5Rate;
-    const profitAdsAff5 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff5;
+      const profitNoAdsNoAff = B - A - feePlatform - feeTax - feeOperate - feeInfra;
+      const profitAdsNoAff   = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra;
 
-    // Lãi FULL ADS, HHLK 8%
-    const feeAff8 = B * CONFIG.aff8Rate;
-    const profitAdsAff8 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff8;
+      const feeAff3  = B * CONFIG.aff3Rate;
+      const feeAff5  = B * CONFIG.aff5Rate;
+      const feeAff8  = B * CONFIG.aff8Rate;
+      const feeAff10 = B * CONFIG.aff10Rate;
 
-    // Lãi FULL ADS, HHLK 10%
-    const feeAff10 = B * CONFIG.aff10Rate;
-    const profitAdsAff10 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff10;
+      const profitAdsAff3  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff3;
+      const profitAdsAff5  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff5;
+      const profitAdsAff8  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff8;
+      const profitAdsAff10 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff10;
 
-    // Đổ số
-    cellA.textContent = formatNumber(A);
-    cellB.textContent = formatNumber(B);
-    cellC.textContent = formatNumber(feePlatform);
-    cellD.textContent = formatNumber(feeTax);
-    cellE.textContent = formatNumber(feeOperate);
-    cellF.textContent = formatNumber(feeAds);
-    cellG.textContent = formatNumber(feeInfra);
+      // Đổ số phí
+      cellA.textContent = formatNumber(A);
+      cellB.textContent = formatNumber(B);
+      cellC.textContent = formatNumber(feePlatform);
+      cellD.textContent = formatNumber(feeTax);
+      cellE.textContent = formatNumber(feeOperate);
+      cellF.textContent = formatNumber(feeAds);
+      cellG.textContent = formatNumber(feeInfra);
 
-    setProfitCell(cellProfitNoAdsNoAff, profitNoAdsNoAff, B);
-    setProfitCell(cellProfitAdsNoAff,   profitAdsNoAff,   B);
-    setProfitCell(cellProfitAdsAff3,    profitAdsAff3,    B);
-    setProfitCell(cellProfitAdsAff5,    profitAdsAff5,    B);
-    setProfitCell(cellProfitAdsAff8,    profitAdsAff8,    B);
-    setProfitCell(cellProfitAdsAff10,   profitAdsAff10,   B);
-  }
+      // Lãi - bảng chi tiết
+      setProfitVisual(cellProfitNoAdsNoAff, profitNoAdsNoAff, B);
+      setProfitVisual(cellProfitAdsNoAff,   profitAdsNoAff,   B);
+      setProfitVisual(cellProfitAdsAff3,    profitAdsAff3,    B);
+      setProfitVisual(cellProfitAdsAff5,    profitAdsAff5,    B);
+      setProfitVisual(cellProfitAdsAff8,    profitAdsAff8,    B);
+      setProfitVisual(cellProfitAdsAff10,   profitAdsAff10,   B);
 
-  function handleMoneyInput(e) {
-    formatInput(e.target);
-    recalc();
-  }
-
-  costInput.addEventListener('input', handleMoneyInput);
-  saleInput.addEventListener('input', handleMoneyInput);
-
-  // Format mặc định & tính lần đầu
-  formatInput(costInput);
-  formatInput(saleInput);
-  recalc();
-</script>
-</body>
-</html>
+      // Lãi - cards tóm tắt
+      setProfitVisual(cardProfitNoAdsNoAff, profitNoAdsNoAff, B);
+      setProfitVisual(cardProfitAdsNoAff,   profitAdsNoAff,   B);
+      setProfitVisual(cardProfitAdsAff3,    profitAdsAff3,    B);
+      setProfitVisual(cardProfitAdsAff5,    profitAdsAff5,    B);
+      setProfitVisual(cardProfitAdsAff8,    profitAdsAff8,    B);
+      setProfitVisual(cardProfitAdsAff10,   profitAdsAff10,   B);
