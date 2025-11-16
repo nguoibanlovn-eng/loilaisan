@@ -30,6 +30,19 @@
       padding: 16px 20px 24px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.06);
     }
+    .hidden { display: none; }
+
+    /* Sticky header (tiêu đề + ô nhập + legend + nút setting) */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: #ffffff;
+      padding-top: 4px;
+      padding-bottom: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
     h1 {
       font-size: 21px;
       margin-top: 0;
@@ -41,7 +54,7 @@
       text-align: center;
       font-size: 12px;
       color: #666;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     /* INPUTS */
@@ -49,7 +62,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 8px;
       justify-content: center;
     }
     .input-group {
@@ -78,9 +91,100 @@
       background: #ffffff;
     }
 
+    /* SETTINGS (tùy chỉnh phí) */
+    .settings {
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: center;
+    }
+    .settings-toggle {
+      border: none;
+      background: #f3f4f6;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      color: #444;
+    }
+    .settings-toggle:hover {
+      background: #e5e7eb;
+    }
+    .settings-panel {
+      margin-top: 10px;
+      border-radius: 10px;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+    .settings-panel.hidden {
+      display: none;
+    }
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px 12px;
+      margin-bottom: 10px;
+    }
+    .settings-field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .settings-field label {
+      font-size: 11px;
+      color: #555;
+    }
+    .settings-field input {
+      padding: 4px 6px;
+      font-size: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      outline: none;
+      text-align: right;
+      background: #fff;
+    }
+    .settings-field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(11,87,208,0.12);
+    }
+    .settings-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 1px 4px rgba(11,87,208,0.25);
+    }
+    .btn-primary:hover {
+      background: #0a4ab5;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid #ddd;
+      color: #555;
+    }
+    .btn-ghost:hover {
+      background: #f3f4f6;
+    }
+
     /* LEGEND */
     .legend {
-      margin-top: 4px;
+      margin-top: 2px;
       font-size: 11px;
       color: #555;
       display: flex;
@@ -100,55 +204,6 @@
       border-radius: 4px;
       margin-right: 4px;
       border: 1px solid rgba(0,0,0,0.1);
-    }
-
-    /* FEES PANEL */
-    .fees-panel {
-      margin-top: 14px;
-      padding: 10px 10px 12px;
-      border-radius: 10px;
-      background: #f7f9ff;
-      border: 1px dashed #c5d0ff;
-    }
-    .fees-title {
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #3b4a9a;
-    }
-    .fees-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .fees-group {
-      flex: 1 1 140px;
-      min-width: 140px;
-    }
-    .fees-group label {
-      font-size: 11px;
-      margin-bottom: 2px;
-      display: block;
-      color: #555;
-    }
-    .fees-group input {
-      width: 100%;
-      padding: 5px 6px;
-      font-size: 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      text-align: right;
-      outline: none;
-      background: #fff;
-    }
-    .fees-group input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 1px rgba(11,87,208,0.2);
-    }
-    .fees-note {
-      margin-top: 6px;
-      font-size: 10px;
-      color: #777;
     }
 
     /* SUMMARY CARDS */
@@ -285,143 +340,165 @@
     }
 
     /* MOBILE */
+    @media (max-width: 900px) {
+      .settings-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
     @media (max-width: 768px) {
       .container { padding: 12px 12px 18px; }
       h1 { font-size: 19px; }
-      .inputs { flex-direction: column; align-items: stretch; }
-      .input-group { max-width: 100%; }
       .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       table { font-size: 11px; }
       th, td { padding: 4px 2px; }
       .table-hint { font-size: 10px; }
     }
     @media (max-width: 480px) {
+      .settings-grid { grid-template-columns: 1fr; }
       .cards-grid { grid-template-columns: 1fr; }
-      .fees-group { flex: 1 1 100%; }
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>Tính nhanh lỗ lãi sàn TMĐT by Lỗ Vũ</h1>
-  <div class="subtitle">
-    Phí sàn <span id="labelPlatformPercent">20</span>% •
-    Thuế <span id="labelTaxPercent">1,5</span>% •
-    Vận hành <span id="labelOperatePercent">10</span>% •
-    Quảng cáo <span id="labelAdsPercent">10</span>% •
-    Hạ tầng <span id="labelInfraAmount">5.000</span>đ/đơn •
-    <span id="labelAffSummary">HHLK: 3% – 5% – 8% – 10%</span>
-  </div>
-
-  <!-- INPUTS -->
-  <div class="inputs">
-    <div class="input-group">
-      <label for="costPrice">Giá vốn (A)</label>
-      <input id="costPrice" type="text" inputmode="numeric" placeholder="Nhập giá vốn" value="100000">
+  <!-- STICKY HEADER -->
+  <div class="sticky-header">
+    <h1>Tính nhanh lỗ lãi sàn TMĐT by Lỗ Vũ</h1>
+    <div class="subtitle">
+      Phí sàn <span id="labelPlatformRate">20%</span> • Thuế <span id="labelTaxRate">1,5%</span> •
+      Vận hành <span id="labelOperationRate">10%</span> • Quảng cáo <span id="labelAdsRate">10%</span> •
+      Hạ tầng <span id="labelInfraFee">5.000</span>đ/đơn •
+      HHLK: <span id="labelAffRates">3% – 5% – 8% – 10%</span>
     </div>
-    <div class="input-group">
-      <label for="salePrice">Giá bán (B)</label>
-      <input id="salePrice" type="text" inputmode="numeric" placeholder="Nhập giá bán" value="200000">
-    </div>
-  </div>
 
-  <!-- LEGEND -->
-  <div class="legend">
-    <span><span class="color-box" style="background:#e6f4ea;"></span>🟢 Lãi (≥ 3% doanh thu)</span>
-    <span><span class="color-box" style="background:#fff8e1;"></span>🟡 Hòa vốn / lãi &lt; 3%</span>
-    <span><span class="color-box" style="background:#fce8e6;"></span>🔴 Lỗ</span>
-  </div>
-
-  <!-- FEES CUSTOMIZATION -->
-  <div class="fees-panel">
-    <div class="fees-title">Tùy chỉnh phí (nâng cao – không bắt buộc)</div>
-    <div class="fees-grid">
-      <div class="fees-group">
-        <label for="platformFeeInput">Phí sàn (%)</label>
-        <input id="platformFeeInput" type="number" step="0.1" min="0" max="50">
+    <!-- INPUTS -->
+    <div class="inputs">
+      <div class="input-group">
+        <label for="costPrice">Giá vốn (A)</label>
+        <input id="costPrice" type="text" inputmode="numeric" placeholder="Nhập giá vốn" value="100000">
       </div>
-      <div class="fees-group">
-        <label for="taxRateInput">Thuế (%)</label>
-        <input id="taxRateInput" type="number" step="0.1" min="0" max="20">
-      </div>
-      <div class="fees-group">
-        <label for="operationRateInput">Vận hành (%)</label>
-        <input id="operationRateInput" type="number" step="0.1" min="0" max="50">
-      </div>
-      <div class="fees-group">
-        <label for="adsRateInput">Quảng cáo (%)</label>
-        <input id="adsRateInput" type="number" step="0.1" min="0" max="100">
-      </div>
-      <div class="fees-group">
-        <label for="infraFeeInput">Hạ tầng (đ/đơn)</label>
-        <input id="infraFeeInput" type="number" step="100" min="0">
-      </div>
-      <div class="fees-group">
-        <label for="aff3Input">HHLK mức 1 (%)</label>
-        <input id="aff3Input" type="number" step="0.1" min="0" max="100">
-      </div>
-      <div class="fees-group">
-        <label for="aff5Input">HHLK mức 2 (%)</label>
-        <input id="aff5Input" type="number" step="0.1" min="0" max="100">
-      </div>
-      <div class="fees-group">
-        <label for="aff8Input">HHLK mức 3 (%)</label>
-        <input id="aff8Input" type="number" step="0.1" min="0" max="100">
-      </div>
-      <div class="fees-group">
-        <label for="aff10Input">HHLK mức 4 (%)</label>
-        <input id="aff10Input" type="number" step="0.1" min="0" max="100">
+      <div class="input-group">
+        <label for="salePrice">Giá bán (B)</label>
+        <input id="salePrice" type="text" inputmode="numeric" placeholder="Nhập giá bán" value="200000">
       </div>
     </div>
-    <div class="fees-note">
-      Các giá trị này chỉ dùng trên trình duyệt của bạn và sẽ được lưu lại (local storage) để lần sau mở lại vẫn giữ cấu hình phí.
+
+    <!-- SETTINGS TOGGLE -->
+    <div class="settings">
+      <button type="button" class="settings-toggle" id="settingsToggle">
+        ⚙️ Tùy chỉnh phí (bấm để mở / đóng)
+      </button>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <span><span class="color-box" style="background:#e6f4ea;"></span>🟢 Lãi (≥ 3% doanh thu)</span>
+      <span><span class="color-box" style="background:#fff8e1;"></span>🟡 Hòa vốn / lãi &lt; 3%</span>
+      <span><span class="color-box" style="background:#fce8e6;"></span>🔴 Lỗ</span>
+    </div>
+  </div>
+
+  <!-- SETTINGS PANEL (collapsible) -->
+  <div class="settings-panel hidden" id="settingsPanel">
+    <div style="margin-bottom:6px;font-size:11px;color:#666;">
+      Các giá trị mặc định phù hợp hiện tại, nhưng bạn có thể chỉnh lại nếu sàn thay đổi biểu phí.
+      Cài đặt sẽ được lưu trên thiết bị &amp; trình duyệt này.
+    </div>
+    <div class="settings-grid">
+      <div class="settings-field">
+        <label for="cfgPlatformRate">Phí sàn (% doanh thu)</label>
+        <input id="cfgPlatformRate" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="settings-field">
+        <label for="cfgTaxRate">Thuế (% doanh thu)</label>
+        <input id="cfgTaxRate" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="settings-field">
+        <label for="cfgOperationRate">Vận hành (% doanh thu)</label>
+        <input id="cfgOperationRate" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="settings-field">
+        <label for="cfgAdsRate">Quảng cáo (% doanh thu)</label>
+        <input id="cfgAdsRate" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="settings-field">
+        <label for="cfgInfraFee">Hạ tầng (đ/đơn)</label>
+        <input id="cfgInfraFee" type="number" step="100" min="0">
+      </div>
+      <div class="settings-field">
+        <label for="cfgAff1">HHLK mức 1 (%)</label>
+        <input id="cfgAff1" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="settings-field">
+        <label for="cfgAff2">HHLK mức 2 (%)</label>
+        <input id="cfgAff2" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="settings-field">
+        <label for="cfgAff3">HHLK mức 3 (%)</label>
+        <input id="cfgAff3" type="number" step="0.1" min="0" max="100">
+      </div>
+      <div class="settings-field">
+        <label for="cfgAff4">HHLK mức 4 (%)</label>
+        <input id="cfgAff4" type="number" step="0.1" min="0" max="100">
+      </div>
+    </div>
+    <div class="settings-actions">
+      <button type="button" class="btn btn-ghost" id="btnResetSettings">Đưa về mặc định</button>
+      <button type="button" class="btn btn-primary" id="btnSaveSettings">Lưu &amp; áp dụng</button>
     </div>
   </div>
 
   <!-- SUMMARY CARDS -->
   <div class="summary-section-title">Kết quả nhanh theo từng kịch bản</div>
   <div class="cards-grid">
-    <div class="card">
-      <div class="card-title">XẢ HÀNG (chỉ phí sàn + thuế)</div>
-      <div id="cardProfitClearance" class="card-profit pl-cell"></div>
-      <div class="card-note">Bỏ chi phí vận hành, quảng cáo, hạ tầng, HHLK.</div>
-    </div>
+    <!-- KHÔNG ADS, KHÔNG HHLK -->
     <div class="card">
       <div class="card-title">KHÔNG ADS, KHÔNG HHLK</div>
       <div id="cardProfitNoAdsNoAff" class="card-profit pl-cell"></div>
       <div class="card-note">Phí sàn, thuế, vận hành, hạ tầng.</div>
     </div>
+
+    <!-- FULL ADS, KHÔNG HHLK -->
     <div class="card">
       <div class="card-title">FULL ADS, KHÔNG HHLK</div>
       <div id="cardProfitAdsNoAff" class="card-profit pl-cell"></div>
       <div class="card-note">Có quảng cáo, chưa chia hoa hồng liên kết.</div>
     </div>
+
+    <!-- FULL ADS + HHLK -->
     <div class="card">
-      <div class="card-title aff3-label">FULL ADS, HHLK 3%</div>
-      <div id="cardProfitAdsAff3" class="card-profit pl-cell"></div>
+      <div class="card-title">FULL ADS, HHLK <span id="labelAff1">3%</span></div>
+      <div id="cardProfitAdsAff1" class="card-profit pl-cell"></div>
       <div class="card-note">Kịch bản HHLK nhẹ, thường áp cho KOC nhỏ.</div>
     </div>
     <div class="card">
-      <div class="card-title aff5-label">FULL ADS, HHLK 5%</div>
-      <div id="cardProfitAdsAff5" class="card-profit pl-cell"></div>
+      <div class="card-title">FULL ADS, HHLK <span id="labelAff2">5%</span></div>
+      <div id="cardProfitAdsAff2" class="card-profit pl-cell"></div>
       <div class="card-note">Mức hoa hồng phổ biến cho KOL/KOC.</div>
     </div>
     <div class="card">
-      <div class="card-title aff8-label">FULL ADS, HHLK 8%</div>
-      <div id="cardProfitAdsAff8" class="card-profit pl-cell"></div>
+      <div class="card-title">FULL ADS, HHLK <span id="labelAff3">8%</span></div>
+      <div id="cardProfitAdsAff3" class="card-profit pl-cell"></div>
       <div class="card-note">Kịch bản ưu đãi mạnh cho đối tác.</div>
     </div>
     <div class="card">
-      <div class="card-title aff10-label">FULL ADS, HHLK 10%</div>
-      <div id="cardProfitAdsAff10" class="card-profit pl-cell"></div>
+      <div class="card-title">FULL ADS, HHLK <span id="labelAff4">10%</span></div>
+      <div id="cardProfitAdsAff4" class="card-profit pl-cell"></div>
       <div class="card-note">Mức hoa hồng rất cao, cần kiểm soát kỹ.</div>
+    </div>
+
+    <!-- XẢ HÀNG: cho xuống cuối -->
+    <div class="card">
+      <div class="card-title">XẢ HÀNG (chỉ phí sàn + thuế)</div>
+      <div id="cardProfitClearance" class="card-profit pl-cell"></div>
+      <div class="card-note">Bỏ chi phí vận hành, quảng cáo, hạ tầng, HHLK.</div>
     </div>
   </div>
 
   <!-- DETAIL TABLE -->
   <div class="table-wrapper">
     <div class="table-header">
-      <span>Chi tiết phí & lãi</span>
+      <span>Chi tiết phí &amp; lãi</span>
       <span class="table-hint">Vuốt ngang để xem đủ cột trên màn hình nhỏ.</span>
     </div>
     <div style="overflow-x:auto;">
@@ -430,18 +507,18 @@
         <tr>
           <th class="sticky">Giá vốn<br>(A)</th>
           <th class="sticky">Giá bán<br>(B)</th>
-          <th class="sticky">Phí sàn<br>20% (C)</th>
-          <th class="sticky">Thuế<br>1,5% (D)</th>
-          <th class="sticky">Vận hành<br>10% (E)</th>
-          <th class="sticky">Quảng cáo<br>10% (F)</th>
-          <th class="sticky">Hạ tầng<br>5.000đ (G)</th>
-          <th class="sticky">Lãi<br>XẢ HÀNG</th>
+          <th class="sticky">Phí sàn<br><span id="thPlatformRate">20%</span> (C)</th>
+          <th class="sticky">Thuế<br><span id="thTaxRate">1,5%</span> (D)</th>
+          <th class="sticky">Vận hành<br><span id="thOperationRate">10%</span> (E)</th>
+          <th class="sticky">Quảng cáo<br><span id="thAdsRate">10%</span> (F)</th>
+          <th class="sticky">Hạ tầng<br><span id="thInfraFee">5.000</span>đ (G)</th>
           <th class="sticky">Lãi<br>KHÔNG ADS,<br>KHÔNG HHLK</th>
           <th class="sticky">Lãi<br>FULL ADS,<br>KHÔNG HHLK</th>
-          <th class="sticky aff3-header">Lãi<br>FULL ADS,<br>HHLK 3%</th>
-          <th class="sticky aff5-header">Lãi<br>FULL ADS,<br>HHLK 5%</th>
-          <th class="sticky aff8-header">Lãi<br>FULL ADS,<br>HHLK 8%</th>
-          <th class="sticky aff10-header">Lãi<br>FULL ADS,<br>HHLK 10%</th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK <span id="thAff1">3%</span></th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK <span id="thAff2">5%</span></th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK <span id="thAff3">8%</span></th>
+          <th class="sticky">Lãi<br>FULL ADS,<br>HHLK <span id="thAff4">10%</span></th>
+          <th class="sticky">Lãi<br>XẢ HÀNG</th>
         </tr>
         </thead>
         <tbody>
@@ -453,13 +530,13 @@
           <td id="cellE"></td>
           <td id="cellF"></td>
           <td id="cellG"></td>
-          <td id="cellProfitClearance" class="pl-cell"></td>
           <td id="cellProfitNoAdsNoAff" class="pl-cell"></td>
           <td id="cellProfitAdsNoAff" class="pl-cell"></td>
+          <td id="cellProfitAdsAff1" class="pl-cell"></td>
+          <td id="cellProfitAdsAff2" class="pl-cell"></td>
           <td id="cellProfitAdsAff3" class="pl-cell"></td>
-          <td id="cellProfitAdsAff5" class="pl-cell"></td>
-          <td id="cellProfitAdsAff8" class="pl-cell"></td>
-          <td id="cellProfitAdsAff10" class="pl-cell"></td>
+          <td id="cellProfitAdsAff4" class="pl-cell"></td>
+          <td id="cellProfitClearance" class="pl-cell"></td>
         </tr>
         </tbody>
       </table>
@@ -471,9 +548,9 @@
     • Khi gõ 100000 phần mềm sẽ hiển thị 100.000 để hạn chế nhầm số 0.
   </div>
 
-  <!-- CTA to nguoibanlo.vn -->
+  <!-- CTA -->
   <div class="cta">
-    <div class="cta-text">Muốn đào sâu thêm về chiến lược & vận hành trên sàn?</div>
+    <div class="cta-text">Muốn đào sâu thêm về chiến lược &amp; vận hành trên sàn?</div>
     <a class="cta-button" href="https://nguoibanlo.vn" target="_blank" rel="noopener noreferrer">
       Đọc thêm các bài viết về TMĐT của Lỗ Vũ
     </a>
@@ -482,99 +559,44 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const STORAGE_KEY = 'loilai_fee_config_v1';
-
     const DEFAULT_CONFIG = {
-      platformFeeRate: 0.20,  // 20% phí sàn
-      taxRate: 0.015,         // 1.5%
-      operationRate: 0.10,    // 10%
-      adsRate: 0.10,          // 10%
+      platformFeeRate: 0.20,
+      taxRate: 0.015,
+      operationRate: 0.10,
+      adsRate: 0.10,
       infraFee: 5000,
-      aff3Rate: 0.03,
-      aff5Rate: 0.05,
-      aff8Rate: 0.08,
-      aff10Rate: 0.10
+      affRates: [0.03, 0.05, 0.08, 0.10]
     };
-
+    const STORAGE_KEY = 'loilaisan_config_v1';
     let CONFIG = { ...DEFAULT_CONFIG };
 
-    function loadConfigFromStorage() {
+    function loadConfig() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return;
-        const saved = JSON.parse(raw);
-        CONFIG = { ...CONFIG, ...saved };
+        const data = JSON.parse(raw);
+        CONFIG = { ...DEFAULT_CONFIG, ...data };
+        if (!Array.isArray(CONFIG.affRates)) {
+          CONFIG.affRates = DEFAULT_CONFIG.affRates.slice();
+        }
       } catch (e) {
-        console.warn('Cannot load config from storage', e);
+        CONFIG = { ...DEFAULT_CONFIG };
       }
     }
-
-    function saveConfigToStorage() {
+    function saveConfig() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(CONFIG));
-      } catch (e) {
-        console.warn('Cannot save config to storage', e);
-      }
+      } catch (e) {}
     }
-
-    const costInput = document.getElementById('costPrice');
-    const saleInput = document.getElementById('salePrice');
-
-    const cellA = document.getElementById('cellA');
-    const cellB = document.getElementById('cellB');
-    const cellC = document.getElementById('cellC');
-    const cellD = document.getElementById('cellD');
-    const cellE = document.getElementById('cellE');
-    const cellF = document.getElementById('cellF');
-    const cellG = document.getElementById('cellG');
-
-    const cellProfitClearance   = document.getElementById('cellProfitClearance');
-    const cellProfitNoAdsNoAff  = document.getElementById('cellProfitNoAdsNoAff');
-    const cellProfitAdsNoAff    = document.getElementById('cellProfitAdsNoAff');
-    const cellProfitAdsAff3     = document.getElementById('cellProfitAdsAff3');
-    const cellProfitAdsAff5     = document.getElementById('cellProfitAdsAff5');
-    const cellProfitAdsAff8     = document.getElementById('cellProfitAdsAff8');
-    const cellProfitAdsAff10    = document.getElementById('cellProfitAdsAff10');
-
-    const cardProfitClearance   = document.getElementById('cardProfitClearance');
-    const cardProfitNoAdsNoAff  = document.getElementById('cardProfitNoAdsNoAff');
-    const cardProfitAdsNoAff    = document.getElementById('cardProfitAdsNoAff');
-    const cardProfitAdsAff3     = document.getElementById('cardProfitAdsAff3');
-    const cardProfitAdsAff5     = document.getElementById('cardProfitAdsAff5');
-    const cardProfitAdsAff8     = document.getElementById('cardProfitAdsAff8');
-    const cardProfitAdsAff10    = document.getElementById('cardProfitAdsAff10');
-
-    const platformFeeInput   = document.getElementById('platformFeeInput');
-    const taxRateInput       = document.getElementById('taxRateInput');
-    const operationRateInput = document.getElementById('operationRateInput');
-    const adsRateInput       = document.getElementById('adsRateInput');
-    const infraFeeInput      = document.getElementById('infraFeeInput');
-    const aff3Input          = document.getElementById('aff3Input');
-    const aff5Input          = document.getElementById('aff5Input');
-    const aff8Input          = document.getElementById('aff8Input');
-    const aff10Input         = document.getElementById('aff10Input');
-
-    const labelPlatformPercent = document.getElementById('labelPlatformPercent');
-    const labelTaxPercent      = document.getElementById('labelTaxPercent');
-    const labelOperatePercent  = document.getElementById('labelOperatePercent');
-    const labelAdsPercent      = document.getElementById('labelAdsPercent');
-    const labelInfraAmount     = document.getElementById('labelInfraAmount');
-    const labelAffSummary      = document.getElementById('labelAffSummary');
 
     function formatNumber(value) {
       if (!isFinite(value)) return '';
       return value.toLocaleString('vi-VN', { maximumFractionDigits: 0 });
     }
-
-    function formatPercentDisplay(rate) {
-      return (rate * 100).toLocaleString('vi-VN', { maximumFractionDigits: 2 }).replace(/\s/g, '');
-    }
-
     function parseMoney(str) {
       const digits = String(str || '').replace(/\D/g, '');
       return digits ? parseInt(digits, 10) : 0;
     }
-
     function normalizeInput(el) {
       if (!el) return 0;
       const num = parseMoney(el.value);
@@ -585,7 +607,11 @@
       el.value = num.toLocaleString('vi-VN');
       return num;
     }
-
+    function formatPercent(rate) {
+      const value = rate * 100;
+      if (Number.isInteger(value)) return value.toString() + '%';
+      return value.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + '%';
+    }
     function formatProfitWithMargin(profit, salePrice) {
       if (!isFinite(profit)) return '';
       const base = salePrice || 0;
@@ -596,7 +622,6 @@
       }
       return text;
     }
-
     function applyProfitStyle(el, profit, salePrice) {
       if (!el) return;
       el.classList.remove('pl-pos','pl-low','pl-neg');
@@ -613,97 +638,144 @@
       }
       el.textContent = formatProfitWithMargin(profit, salePrice);
     }
-
     function updateScenario(cellEl, cardEl, profit, salePrice) {
       applyProfitStyle(cellEl,  profit, salePrice);
       applyProfitStyle(cardEl,  profit, salePrice);
     }
 
-    function updateLabelsFromConfig() {
-      if (labelPlatformPercent) labelPlatformPercent.textContent = formatPercentDisplay(CONFIG.platformFeeRate);
-      if (labelTaxPercent)      labelTaxPercent.textContent      = formatPercentDisplay(CONFIG.taxRate);
-      if (labelOperatePercent)  labelOperatePercent.textContent  = formatPercentDisplay(CONFIG.operationRate);
-      if (labelAdsPercent)      labelAdsPercent.textContent      = formatPercentDisplay(CONFIG.adsRate);
-      if (labelInfraAmount)     labelInfraAmount.textContent     = formatNumber(CONFIG.infraFee);
+    // DOM
+    const costInput = document.getElementById('costPrice');
+    const saleInput = document.getElementById('salePrice');
 
-      const aff3 = formatPercentDisplay(CONFIG.aff3Rate);
-      const aff5 = formatPercentDisplay(CONFIG.aff5Rate);
-      const aff8 = formatPercentDisplay(CONFIG.aff8Rate);
-      const aff10= formatPercentDisplay(CONFIG.aff10Rate);
+    const cellA = document.getElementById('cellA');
+    const cellB = document.getElementById('cellB');
+    const cellC = document.getElementById('cellC');
+    const cellD = document.getElementById('cellD');
+    const cellE = document.getElementById('cellE');
+    const cellF = document.getElementById('cellF');
+    const cellG = document.getElementById('cellG');
 
-      if (labelAffSummary) {
-        labelAffSummary.textContent = "HHLK: " + aff3 + "% – " + aff5 + "% – " + aff8 + "% – " + aff10 + "%";
+    const cellProfitClearance   = document.getElementById('cellProfitClearance');
+    const cellProfitNoAdsNoAff  = document.getElementById('cellProfitNoAdsNoAff');
+    const cellProfitAdsNoAff    = document.getElementById('cellProfitAdsNoAff');
+    const cellProfitAdsAff1     = document.getElementById('cellProfitAdsAff1');
+    const cellProfitAdsAff2     = document.getElementById('cellProfitAdsAff2');
+    const cellProfitAdsAff3     = document.getElementById('cellProfitAdsAff3');
+    const cellProfitAdsAff4     = document.getElementById('cellProfitAdsAff4');
+
+    const cardProfitClearance   = document.getElementById('cardProfitClearance');
+    const cardProfitNoAdsNoAff  = document.getElementById('cardProfitNoAdsNoAff');
+    const cardProfitAdsNoAff    = document.getElementById('cardProfitAdsNoAff');
+    const cardProfitAdsAff1     = document.getElementById('cardProfitAdsAff1');
+    const cardProfitAdsAff2     = document.getElementById('cardProfitAdsAff2');
+    const cardProfitAdsAff3     = document.getElementById('cardProfitAdsAff3');
+    const cardProfitAdsAff4     = document.getElementById('cardProfitAdsAff4');
+
+    const labelPlatformRate   = document.getElementById('labelPlatformRate');
+    const labelTaxRate        = document.getElementById('labelTaxRate');
+    const labelOperationRate  = document.getElementById('labelOperationRate');
+    const labelAdsRate        = document.getElementById('labelAdsRate');
+    const labelInfraFee       = document.getElementById('labelInfraFee');
+    const labelAffRates       = document.getElementById('labelAffRates');
+
+    const thPlatformRate  = document.getElementById('thPlatformRate');
+    const thTaxRate       = document.getElementById('thTaxRate');
+    const thOperationRate = document.getElementById('thOperationRate');
+    const thAdsRate       = document.getElementById('thAdsRate');
+    const thInfraFee      = document.getElementById('thInfraFee');
+
+    const labelAff1 = document.getElementById('labelAff1');
+    const labelAff2 = document.getElementById('labelAff2');
+    const labelAff3 = document.getElementById('labelAff3');
+    const labelAff4 = document.getElementById('labelAff4');
+    const thAff1    = document.getElementById('thAff1');
+    const thAff2    = document.getElementById('thAff2');
+    const thAff3    = document.getElementById('thAff3');
+    const thAff4    = document.getElementById('thAff4');
+
+    const settingsToggle  = document.getElementById('settingsToggle');
+    const settingsPanel   = document.getElementById('settingsPanel');
+    const btnSaveSettings = document.getElementById('btnSaveSettings');
+    const btnResetSettings= document.getElementById('btnResetSettings');
+
+    const cfgPlatformRate   = document.getElementById('cfgPlatformRate');
+    const cfgTaxRate        = document.getElementById('cfgTaxRate');
+    const cfgOperationRate  = document.getElementById('cfgOperationRate');
+    const cfgAdsRate        = document.getElementById('cfgAdsRate');
+    const cfgInfraFee       = document.getElementById('cfgInfraFee');
+    const cfgAff1           = document.getElementById('cfgAff1');
+    const cfgAff2           = document.getElementById('cfgAff2');
+    const cfgAff3           = document.getElementById('cfgAff3');
+    const cfgAff4           = document.getElementById('cfgAff4');
+
+    function applyConfigLabels() {
+      if (labelPlatformRate) labelPlatformRate.textContent = formatPercent(CONFIG.platformFeeRate);
+      if (labelTaxRate)      labelTaxRate.textContent      = formatPercent(CONFIG.taxRate);
+      if (labelOperationRate)labelOperationRate.textContent= formatPercent(CONFIG.operationRate);
+      if (labelAdsRate)      labelAdsRate.textContent      = formatPercent(CONFIG.adsRate);
+      if (labelInfraFee)     labelInfraFee.textContent     = formatNumber(CONFIG.infraFee);
+
+      if (labelAffRates) {
+        labelAffRates.textContent = CONFIG.affRates.map(r => formatPercent(r)).join(' – ');
       }
 
-      document.querySelectorAll('.aff3-label').forEach(el => {
-        el.textContent = "FULL ADS, HHLK " + aff3 + "%";
-      });
-      document.querySelectorAll('.aff5-label').forEach(el => {
-        el.textContent = "FULL ADS, HHLK " + aff5 + "%";
-      });
-      document.querySelectorAll('.aff8-label').forEach(el => {
-        el.textContent = "FULL ADS, HHLK " + aff8 + "%";
-      });
-      document.querySelectorAll('.aff10-label').forEach(el => {
-        el.textContent = "FULL ADS, HHLK " + aff10 + "%";
-      });
+      if (thPlatformRate)  thPlatformRate.textContent  = formatPercent(CONFIG.platformFeeRate);
+      if (thTaxRate)       thTaxRate.textContent       = formatPercent(CONFIG.taxRate);
+      if (thOperationRate) thOperationRate.textContent = formatPercent(CONFIG.operationRate);
+      if (thAdsRate)       thAdsRate.textContent       = formatPercent(CONFIG.adsRate);
+      if (thInfraFee)      thInfraFee.textContent      = formatNumber(CONFIG.infraFee);
 
-      document.querySelectorAll('.aff3-header').forEach(el => {
-        el.innerHTML = "Lãi<br>FULL ADS,<br>HHLK " + aff3 + "%";
-      });
-      document.querySelectorAll('.aff5-header').forEach(el => {
-        el.innerHTML = "Lãi<br>FULL ADS,<br>HHLK " + aff5 + "%";
-      });
-      document.querySelectorAll('.aff8-header').forEach(el => {
-        el.innerHTML = "Lãi<br>FULL ADS,<br>HHLK " + aff8 + "%";
-      });
-      document.querySelectorAll('.aff10-header').forEach(el => {
-        el.innerHTML = "Lãi<br>FULL ADS,<br>HHLK " + aff10 + "%";
-      });
+      const [r1, r2, r3, r4] = CONFIG.affRates;
+      if (labelAff1) labelAff1.textContent = formatPercent(r1);
+      if (labelAff2) labelAff2.textContent = formatPercent(r2);
+      if (labelAff3) labelAff3.textContent = formatPercent(r3);
+      if (labelAff4) labelAff4.textContent = formatPercent(r4);
+
+      if (thAff1) thAff1.textContent = formatPercent(r1);
+      if (thAff2) thAff2.textContent = formatPercent(r2);
+      if (thAff3) thAff3.textContent = formatPercent(r3);
+      if (thAff4) thAff4.textContent = formatPercent(r4);
     }
 
-    function fillFeeInputsFromConfig() {
-      if (platformFeeInput)   platformFeeInput.value   = (CONFIG.platformFeeRate * 100).toString();
-      if (taxRateInput)       taxRateInput.value       = (CONFIG.taxRate * 100).toString();
-      if (operationRateInput) operationRateInput.value = (CONFIG.operationRate * 100).toString();
-      if (adsRateInput)       adsRateInput.value       = (CONFIG.adsRate * 100).toString();
-      if (infraFeeInput)      infraFeeInput.value      = CONFIG.infraFee.toString();
-      if (aff3Input)          aff3Input.value          = (CONFIG.aff3Rate * 100).toString();
-      if (aff5Input)          aff5Input.value          = (CONFIG.aff5Rate * 100).toString();
-      if (aff8Input)          aff8Input.value          = (CONFIG.aff8Rate * 100).toString();
-      if (aff10Input)         aff10Input.value         = (CONFIG.aff10Rate * 100).toString();
+    function populateSettingsInputs() {
+      cfgPlatformRate.value  = (CONFIG.platformFeeRate * 100).toString();
+      cfgTaxRate.value       = (CONFIG.taxRate * 100).toString();
+      cfgOperationRate.value = (CONFIG.operationRate * 100).toString();
+      cfgAdsRate.value       = (CONFIG.adsRate * 100).toString();
+      cfgInfraFee.value      = CONFIG.infraFee.toString();
+
+      cfgAff1.value = (CONFIG.affRates[0] * 100).toString();
+      cfgAff2.value = (CONFIG.affRates[1] * 100).toString();
+      cfgAff3.value = (CONFIG.affRates[2] * 100).toString();
+      cfgAff4.value = (CONFIG.affRates[3] * 100).toString();
     }
 
     function parsePercentInput(el, fallback) {
       if (!el) return fallback;
-      const v = String(el.value || "").replace(',', '.');
-      const num = parseFloat(v);
-      if (!isFinite(num) || num < 0) return fallback;
-      return num / 100;
+      const raw = String(el.value || '').replace(',', '.');
+      const num = parseFloat(raw);
+      return isFinite(num) ? num : fallback;
     }
 
-    function parseNumberInput(el, fallback) {
-      if (!el) return fallback;
-      const num = parseFloat(el.value);
-      if (!isFinite(num) || num < 0) return fallback;
-      return Math.round(num);
-    }
+    function applySettingsFromInputs() {
+      const pPlatform = parsePercentInput(cfgPlatformRate,  CONFIG.platformFeeRate*100);
+      const pTax      = parsePercentInput(cfgTaxRate,       CONFIG.taxRate*100);
+      const pOper     = parsePercentInput(cfgOperationRate, CONFIG.operationRate*100);
+      const pAds      = parsePercentInput(cfgAdsRate,       CONFIG.adsRate*100);
+      const infra     = parseMoney(cfgInfraFee.value);
 
-    function handleFeesChange() {
-      CONFIG.platformFeeRate = parsePercentInput(platformFeeInput, CONFIG.platformFeeRate);
-      CONFIG.taxRate         = parsePercentInput(taxRateInput, CONFIG.taxRate);
-      CONFIG.operationRate   = parsePercentInput(operationRateInput, CONFIG.operationRate);
-      CONFIG.adsRate         = parsePercentInput(adsRateInput, CONFIG.adsRate);
-      CONFIG.infraFee        = parseNumberInput(infraFeeInput, CONFIG.infraFee);
-      CONFIG.aff3Rate        = parsePercentInput(aff3Input, CONFIG.aff3Rate);
-      CONFIG.aff5Rate        = parsePercentInput(aff5Input, CONFIG.aff5Rate);
-      CONFIG.aff8Rate        = parsePercentInput(aff8Input, CONFIG.aff8Rate);
-      CONFIG.aff10Rate       = parsePercentInput(aff10Input, CONFIG.aff10Rate);
+      const pAff1 = parsePercentInput(cfgAff1, CONFIG.affRates[0]*100);
+      const pAff2 = parsePercentInput(cfgAff2, CONFIG.affRates[1]*100);
+      const pAff3 = parsePercentInput(cfgAff3, CONFIG.affRates[2]*100);
+      const pAff4 = parsePercentInput(cfgAff4, CONFIG.affRates[3]*100);
 
-      fillFeeInputsFromConfig(); // chuẩn hoá lại số trên ô
-      saveConfigToStorage();
-      updateLabelsFromConfig();
-      recalc();
+      CONFIG.platformFeeRate = pPlatform / 100;
+      CONFIG.taxRate         = pTax / 100;
+      CONFIG.operationRate   = pOper / 100;
+      CONFIG.adsRate         = pAds / 100;
+      CONFIG.infraFee        = infra;
+
+      CONFIG.affRates = [pAff1/100, pAff2/100, pAff3/100, pAff4/100];
     }
 
     function recalc() {
@@ -716,22 +788,21 @@
       const feeAds      = B * CONFIG.adsRate;
       const feeInfra    = CONFIG.infraFee;
 
-      // Xả hàng: chỉ trừ sàn + thuế
       const profitClearance   = B - A - feePlatform - feeTax;
 
-      // Các kịch bản khác
       const profitNoAdsNoAff  = B - A - feePlatform - feeTax - feeOperate - feeInfra;
       const profitAdsNoAff    = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra;
 
-      const feeAff3  = B * CONFIG.aff3Rate;
-      const feeAff5  = B * CONFIG.aff5Rate;
-      const feeAff8  = B * CONFIG.aff8Rate;
-      const feeAff10 = B * CONFIG.aff10Rate;
+      const [r1, r2, r3, r4] = CONFIG.affRates;
+      const feeAff1 = B * r1;
+      const feeAff2 = B * r2;
+      const feeAff3 = B * r3;
+      const feeAff4 = B * r4;
 
+      const profitAdsAff1  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff1;
+      const profitAdsAff2  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff2;
       const profitAdsAff3  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff3;
-      const profitAdsAff5  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff5;
-      const profitAdsAff8  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff8;
-      const profitAdsAff10 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff10;
+      const profitAdsAff4  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff4;
 
       if (cellA) cellA.textContent = formatNumber(A);
       if (cellB) cellB.textContent = formatNumber(B);
@@ -744,31 +815,45 @@
       updateScenario(cellProfitClearance,  cardProfitClearance,  profitClearance,  B);
       updateScenario(cellProfitNoAdsNoAff, cardProfitNoAdsNoAff, profitNoAdsNoAff, B);
       updateScenario(cellProfitAdsNoAff,   cardProfitAdsNoAff,   profitAdsNoAff,   B);
+      updateScenario(cellProfitAdsAff1,    cardProfitAdsAff1,    profitAdsAff1,    B);
+      updateScenario(cellProfitAdsAff2,    cardProfitAdsAff2,    profitAdsAff2,    B);
       updateScenario(cellProfitAdsAff3,    cardProfitAdsAff3,    profitAdsAff3,    B);
-      updateScenario(cellProfitAdsAff5,    cardProfitAdsAff5,    profitAdsAff5,    B);
-      updateScenario(cellProfitAdsAff8,    cardProfitAdsAff8,    profitAdsAff8,    B);
-      updateScenario(cellProfitAdsAff10,   cardProfitAdsAff10,   profitAdsAff10,   B);
+      updateScenario(cellProfitAdsAff4,    cardProfitAdsAff4,    profitAdsAff4,    B);
     }
 
-    // ---- Khởi tạo ----
-    loadConfigFromStorage();
-    fillFeeInputsFromConfig();
-    updateLabelsFromConfig();
-
-    if (platformFeeInput)   platformFeeInput.addEventListener('change', handleFeesChange);
-    if (taxRateInput)       taxRateInput.addEventListener('change', handleFeesChange);
-    if (operationRateInput) operationRateInput.addEventListener('change', handleFeesChange);
-    if (adsRateInput)       adsRateInput.addEventListener('change', handleFeesChange);
-    if (infraFeeInput)      infraFeeInput.addEventListener('change', handleFeesChange);
-    if (aff3Input)          aff3Input.addEventListener('change', handleFeesChange);
-    if (aff5Input)          aff5Input.addEventListener('change', handleFeesChange);
-    if (aff8Input)          aff8Input.addEventListener('change', handleFeesChange);
-    if (aff10Input)         aff10Input.addEventListener('change', handleFeesChange);
+    // ==== INIT ====
+    loadConfig();
+    applyConfigLabels();
+    populateSettingsInputs();
+    recalc();
 
     if (costInput) costInput.addEventListener('input', recalc);
     if (saleInput) saleInput.addEventListener('input', recalc);
 
-    recalc();
+    if (settingsToggle && settingsPanel) {
+      settingsToggle.addEventListener('click', function () {
+        settingsPanel.classList.toggle('hidden');
+      });
+    }
+
+    if (btnSaveSettings) {
+      btnSaveSettings.addEventListener('click', function () {
+        applySettingsFromInputs();
+        saveConfig();
+        applyConfigLabels();
+        recalc();
+      });
+    }
+
+    if (btnResetSettings) {
+      btnResetSettings.addEventListener('click', function () {
+        CONFIG = { ...DEFAULT_CONFIG };
+        saveConfig();
+        applyConfigLabels();
+        populateSettingsInputs();
+        recalc();
+      });
+    }
   });
 </script>
 </body>
