@@ -14,9 +14,7 @@
       --red-text: #b3261e;
       --card-radius: 10px;
     }
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f5f5f5;
@@ -205,37 +203,18 @@
 
     /* MOBILE */
     @media (max-width: 768px) {
-      .container {
-        padding: 12px 12px 18px;
-      }
-      h1 {
-        font-size: 18px;
-      }
-      .inputs {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .input-group {
-        max-width: 100%;
-      }
-      .cards-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      table {
-        font-size: 11px;
-      }
-      th, td {
-        padding: 4px 2px;
-      }
-      .table-hint {
-        font-size: 10px;
-      }
+      .container { padding: 12px 12px 18px; }
+      h1 { font-size: 18px; }
+      .inputs { flex-direction: column; align-items: stretch; }
+      .input-group { max-width: 100%; }
+      .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      table { font-size: 11px; }
+      th, td { padding: 4px 2px; }
+      .table-hint { font-size: 10px; }
     }
 
     @media (max-width: 480px) {
-      .cards-grid {
-        grid-template-columns: 1fr;
-      }
+      .cards-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -353,7 +332,7 @@
 </div>
 
 <script>
-  window.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
     const CONFIG = {
       platformFeeRate: 0.19,
       taxRate: 0.015,
@@ -402,6 +381,7 @@
     }
 
     function normalizeInput(el) {
+      if (!el) return 0;
       const num = parseMoney(el.value);
       if (num === 0) {
         el.value = '';
@@ -422,20 +402,26 @@
       return text;
     }
 
-    function setProfitVisual(cell, profit, salePrice) {
-      cell.classList.remove('pl-pos','pl-low','pl-neg');
+    function applyProfitStyle(el, profit, salePrice) {
+      if (!el) return;
+      el.classList.remove('pl-pos','pl-low','pl-neg');
       const base = salePrice || 0;
       let margin = 0;
       if (base > 0) margin = profit / base;
 
       if (profit < 0) {
-        cell.classList.add('pl-neg');
+        el.classList.add('pl-neg');
       } else if (profit === 0 || margin < 0.03) {
-        cell.classList.add('pl-low');
+        el.classList.add('pl-low');
       } else {
-        cell.classList.add('pl-pos');
+        el.classList.add('pl-pos');
       }
-      cell.textContent = formatProfitWithMargin(profit, salePrice);
+      el.textContent = formatProfitWithMargin(profit, salePrice);
+    }
+
+    function updateScenario(cellEl, cardEl, profit, salePrice) {
+      applyProfitStyle(cellEl,  profit, salePrice);
+      applyProfitStyle(cardEl,  profit, salePrice);
     }
 
     function recalc() {
@@ -461,27 +447,28 @@
       const profitAdsAff8  = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff8;
       const profitAdsAff10 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff10;
 
-      // Đổ số phí
-      cellA.textContent = formatNumber(A);
-      cellB.textContent = formatNumber(B);
-      cellC.textContent = formatNumber(feePlatform);
-      cellD.textContent = formatNumber(feeTax);
-      cellE.textContent = formatNumber(feeOperate);
-      cellF.textContent = formatNumber(feeAds);
-      cellG.textContent = formatNumber(feeInfra);
+      if (cellA) cellA.textContent = formatNumber(A);
+      if (cellB) cellB.textContent = formatNumber(B);
+      if (cellC) cellC.textContent = formatNumber(feePlatform);
+      if (cellD) cellD.textContent = formatNumber(feeTax);
+      if (cellE) cellE.textContent = formatNumber(feeOperate);
+      if (cellF) cellF.textContent = formatNumber(feeAds);
+      if (cellG) cellG.textContent = formatNumber(feeInfra);
 
-      // Lãi - bảng chi tiết
-      setProfitVisual(cellProfitNoAdsNoAff, profitNoAdsNoAff, B);
-      setProfitVisual(cellProfitAdsNoAff,   profitAdsNoAff,   B);
-      setProfitVisual(cellProfitAdsAff3,    profitAdsAff3,    B);
-      setProfitVisual(cellProfitAdsAff5,    profitAdsAff5,    B);
-      setProfitVisual(cellProfitAdsAff8,    profitAdsAff8,    B);
-      setProfitVisual(cellProfitAdsAff10,   profitAdsAff10,   B);
+      updateScenario(cellProfitNoAdsNoAff, cardProfitNoAdsNoAff, profitNoAdsNoAff, B);
+      updateScenario(cellProfitAdsNoAff,   cardProfitAdsNoAff,   profitAdsNoAff,   B);
+      updateScenario(cellProfitAdsAff3,    cardProfitAdsAff3,    profitAdsAff3,    B);
+      updateScenario(cellProfitAdsAff5,    cardProfitAdsAff5,    profitAdsAff5,    B);
+      updateScenario(cellProfitAdsAff8,    cardProfitAdsAff8,    profitAdsAff8,    B);
+      updateScenario(cellProfitAdsAff10,   cardProfitAdsAff10,   profitAdsAff10,   B);
+    }
 
-      // Lãi - cards tóm tắt
-      setProfitVisual(cardProfitNoAdsNoAff, profitNoAdsNoAff, B);
-      setProfitVisual(cardProfitAdsNoAff,   profitAdsNoAff,   B);
-      setProfitVisual(cardProfitAdsAff3,    profitAdsAff3,    B);
-      setProfitVisual(cardProfitAdsAff5,    profitAdsAff5,    B);
-      setProfitVisual(cardProfitAdsAff8,    profitAdsAff8,    B);
-      setProfitVisual(cardProfitAdsAff10,   profitAdsAff10,   B);
+    if (costInput) costInput.addEventListener('input', recalc);
+    if (saleInput) saleInput.addEventListener('input', recalc);
+
+    // chạy lần đầu
+    recalc();
+  });
+</script>
+</body>
+</html>
