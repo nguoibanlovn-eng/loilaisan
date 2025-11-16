@@ -281,4 +281,78 @@
     }
 
     if (profit < 0) {
-      cell.classList.ad
+      cell.classList.add('pl-neg');      // Lỗ
+    } else if (profit === 0 || margin < 0.03) {
+      cell.classList.add('pl-low');      // Hòa vốn / lãi < 3%
+    } else {
+      cell.classList.add('pl-pos');      // Lãi >= 3%
+    }
+
+    cell.textContent = formatProfitWithMargin(profit, salePrice);
+  }
+
+  function recalc() {
+    // Lấy số đã bóc dấu chấm
+    const A = getNumericFromFormatted(costInput.value); // Giá vốn
+    const B = getNumericFromFormatted(saleInput.value); // Giá bán
+
+    const feePlatform = B * CONFIG.platformFeeRate;
+    const feeTax      = B * CONFIG.taxRate;
+    const feeOperate  = B * CONFIG.operationRate;
+    const feeAds      = B * CONFIG.adsRate;
+    const feeInfra    = CONFIG.infraFee;
+
+    // Lãi KHÔNG ADS, KHÔNG HHLK
+    const profitNoAdsNoAff = B - A - feePlatform - feeTax - feeOperate - feeInfra;
+
+    // Lãi FULL ADS, KHÔNG HHLK
+    const profitAdsNoAff = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra;
+
+    // Lãi FULL ADS, HHLK 3%
+    const feeAff3 = B * CONFIG.aff3Rate;
+    const profitAdsAff3 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff3;
+
+    // Lãi FULL ADS, HHLK 5%
+    const feeAff5 = B * CONFIG.aff5Rate;
+    const profitAdsAff5 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff5;
+
+    // Lãi FULL ADS, HHLK 8%
+    const feeAff8 = B * CONFIG.aff8Rate;
+    const profitAdsAff8 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff8;
+
+    // Lãi FULL ADS, HHLK 10%
+    const feeAff10 = B * CONFIG.aff10Rate;
+    const profitAdsAff10 = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra - feeAff10;
+
+    // Đổ số
+    cellA.textContent = formatNumber(A);
+    cellB.textContent = formatNumber(B);
+    cellC.textContent = formatNumber(feePlatform);
+    cellD.textContent = formatNumber(feeTax);
+    cellE.textContent = formatNumber(feeOperate);
+    cellF.textContent = formatNumber(feeAds);
+    cellG.textContent = formatNumber(feeInfra);
+
+    setProfitCell(cellProfitNoAdsNoAff, profitNoAdsNoAff, B);
+    setProfitCell(cellProfitAdsNoAff,   profitAdsNoAff,   B);
+    setProfitCell(cellProfitAdsAff3,    profitAdsAff3,    B);
+    setProfitCell(cellProfitAdsAff5,    profitAdsAff5,    B);
+    setProfitCell(cellProfitAdsAff8,    profitAdsAff8,    B);
+    setProfitCell(cellProfitAdsAff10,   profitAdsAff10,   B);
+  }
+
+  function handleMoneyInput(e) {
+    formatInput(e.target);
+    recalc();
+  }
+
+  costInput.addEventListener('input', handleMoneyInput);
+  saleInput.addEventListener('input', handleMoneyInput);
+
+  // Format mặc định & tính lần đầu
+  formatInput(costInput);
+  formatInput(saleInput);
+  recalc();
+</script>
+</body>
+</html>
