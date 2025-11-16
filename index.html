@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Máy tính lỗ lãi sàn TMĐT</title>
+  <title>Máy tính lỗ lãi trên sàn TMĐT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -222,7 +222,7 @@
 <div class="container">
   <h1>Máy tính lỗ lãi trên sàn TMĐT</h1>
   <div class="subtitle">
-    Phí sàn 19% • Thuế 1,5% • Vận hành 10% • Quảng cáo 10% • Hạ tầng 5.000đ/đơn • HHLK: 3% – 5% – 8% – 10%
+    Phí sàn 20% • Thuế 1,5% • Vận hành 10% • Quảng cáo 10% • Hạ tầng 5.000đ/đơn • HHLK: 3% – 5% – 8% – 10%
   </div>
 
   <!-- INPUTS -->
@@ -248,9 +248,14 @@
   <div class="summary-section-title">Kết quả nhanh theo từng kịch bản</div>
   <div class="cards-grid">
     <div class="card">
+      <div class="card-title">XẢ HÀNG (chỉ phí sàn + thuế)</div>
+      <div id="cardProfitClearance" class="card-profit pl-cell"></div>
+      <div class="card-note">Bỏ chi phí vận hành, quảng cáo, hạ tầng, HHLK.</div>
+    </div>
+    <div class="card">
       <div class="card-title">KHÔNG ADS, KHÔNG HHLK</div>
       <div id="cardProfitNoAdsNoAff" class="card-profit pl-cell"></div>
-      <div class="card-note">Chỉ tính phí sàn, thuế, vận hành, hạ tầng.</div>
+      <div class="card-note">Phí sàn, thuế, vận hành, hạ tầng.</div>
     </div>
     <div class="card">
       <div class="card-title">FULL ADS, KHÔNG HHLK</div>
@@ -291,11 +296,12 @@
         <tr>
           <th class="sticky">Giá vốn<br>(A)</th>
           <th class="sticky">Giá bán<br>(B)</th>
-          <th class="sticky">Phí sàn<br>19% (C)</th>
+          <th class="sticky">Phí sàn<br>20% (C)</th>
           <th class="sticky">Thuế<br>1,5% (D)</th>
           <th class="sticky">Vận hành<br>10% (E)</th>
           <th class="sticky">Quảng cáo<br>10% (F)</th>
           <th class="sticky">Hạ tầng<br>5.000đ (G)</th>
+          <th class="sticky">Lãi<br>XẢ HÀNG</th>
           <th class="sticky">Lãi<br>KHÔNG ADS,<br>KHÔNG HHLK</th>
           <th class="sticky">Lãi<br>FULL ADS,<br>KHÔNG HHLK</th>
           <th class="sticky">Lãi<br>FULL ADS,<br>HHLK 3%</th>
@@ -313,6 +319,7 @@
           <td id="cellE"></td>
           <td id="cellF"></td>
           <td id="cellG"></td>
+          <td id="cellProfitClearance" class="pl-cell"></td>
           <td id="cellProfitNoAdsNoAff" class="pl-cell"></td>
           <td id="cellProfitAdsNoAff" class="pl-cell"></td>
           <td id="cellProfitAdsAff3" class="pl-cell"></td>
@@ -334,7 +341,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const CONFIG = {
-      platformFeeRate: 0.19,
+      platformFeeRate: 0.20,  // 20% phí sàn
       taxRate: 0.015,
       operationRate: 0.10,
       adsRate: 0.10,
@@ -356,19 +363,21 @@
     const cellF = document.getElementById('cellF');
     const cellG = document.getElementById('cellG');
 
-    const cellProfitNoAdsNoAff = document.getElementById('cellProfitNoAdsNoAff');
-    const cellProfitAdsNoAff   = document.getElementById('cellProfitAdsNoAff');
-    const cellProfitAdsAff3    = document.getElementById('cellProfitAdsAff3');
-    const cellProfitAdsAff5    = document.getElementById('cellProfitAdsAff5');
-    const cellProfitAdsAff8    = document.getElementById('cellProfitAdsAff8');
-    const cellProfitAdsAff10   = document.getElementById('cellProfitAdsAff10');
+    const cellProfitClearance   = document.getElementById('cellProfitClearance');
+    const cellProfitNoAdsNoAff  = document.getElementById('cellProfitNoAdsNoAff');
+    const cellProfitAdsNoAff    = document.getElementById('cellProfitAdsNoAff');
+    const cellProfitAdsAff3     = document.getElementById('cellProfitAdsAff3');
+    const cellProfitAdsAff5     = document.getElementById('cellProfitAdsAff5');
+    const cellProfitAdsAff8     = document.getElementById('cellProfitAdsAff8');
+    const cellProfitAdsAff10    = document.getElementById('cellProfitAdsAff10');
 
-    const cardProfitNoAdsNoAff = document.getElementById('cardProfitNoAdsNoAff');
-    const cardProfitAdsNoAff   = document.getElementById('cardProfitAdsNoAff');
-    const cardProfitAdsAff3    = document.getElementById('cardProfitAdsAff3');
-    const cardProfitAdsAff5    = document.getElementById('cardProfitAdsAff5');
-    const cardProfitAdsAff8    = document.getElementById('cardProfitAdsAff8');
-    const cardProfitAdsAff10   = document.getElementById('cardProfitAdsAff10');
+    const cardProfitClearance   = document.getElementById('cardProfitClearance');
+    const cardProfitNoAdsNoAff  = document.getElementById('cardProfitNoAdsNoAff');
+    const cardProfitAdsNoAff    = document.getElementById('cardProfitAdsNoAff');
+    const cardProfitAdsAff3     = document.getElementById('cardProfitAdsAff3');
+    const cardProfitAdsAff5     = document.getElementById('cardProfitAdsAff5');
+    const cardProfitAdsAff8     = document.getElementById('cardProfitAdsAff8');
+    const cardProfitAdsAff10    = document.getElementById('cardProfitAdsAff10');
 
     function formatNumber(value) {
       if (!isFinite(value)) return '';
@@ -434,8 +443,12 @@
       const feeAds      = B * CONFIG.adsRate;
       const feeInfra    = CONFIG.infraFee;
 
-      const profitNoAdsNoAff = B - A - feePlatform - feeTax - feeOperate - feeInfra;
-      const profitAdsNoAff   = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra;
+      // Xả hàng: chỉ trừ sàn + thuế
+      const profitClearance   = B - A - feePlatform - feeTax;
+
+      // Các kịch bản khác
+      const profitNoAdsNoAff  = B - A - feePlatform - feeTax - feeOperate - feeInfra;
+      const profitAdsNoAff    = B - A - feePlatform - feeTax - feeOperate - feeAds - feeInfra;
 
       const feeAff3  = B * CONFIG.aff3Rate;
       const feeAff5  = B * CONFIG.aff5Rate;
@@ -455,6 +468,7 @@
       if (cellF) cellF.textContent = formatNumber(feeAds);
       if (cellG) cellG.textContent = formatNumber(feeInfra);
 
+      updateScenario(cellProfitClearance,  cardProfitClearance,  profitClearance,  B);
       updateScenario(cellProfitNoAdsNoAff, cardProfitNoAdsNoAff, profitNoAdsNoAff, B);
       updateScenario(cellProfitAdsNoAff,   cardProfitAdsNoAff,   profitAdsNoAff,   B);
       updateScenario(cellProfitAdsAff3,    cardProfitAdsAff3,    profitAdsAff3,    B);
@@ -466,7 +480,6 @@
     if (costInput) costInput.addEventListener('input', recalc);
     if (saleInput) saleInput.addEventListener('input', recalc);
 
-    // chạy lần đầu
     recalc();
   });
 </script>
