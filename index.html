@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tool tính lỗ lãi — Lỗ Vũ / Velasboost</title>
+<title>Tính giá bán lẻ TMĐT — Lỗ Vũ</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -11,25 +11,38 @@
     background: #f7f7f5;
     color: #1a1a1a;
     margin: 0;
-    padding: 16px 16px 24px;
+    padding: 16px;
     line-height: 1.5;
   }
-  .container { max-width: 720px; margin: 0 auto; }
-  h1 { font-size: 20px; font-weight: 500; margin: 0 0 2px; }
-  .subtitle { font-size: 12px; color: #6e6e6e; margin: 0 0 14px; }
+  .layout {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 16px;
+    align-items: start;
+  }
+  .col-left { min-width: 0; }
+  .col-right {
+    position: sticky;
+    top: 16px;
+  }
+
   .section-title {
     font-size: 11px; font-weight: 500; color: #6e6e6e;
-    margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.04em;
+    margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.05em;
   }
-  .field-row { display: grid; gap: 10px; margin-bottom: 0; }
+  .field-row { display: grid; gap: 10px; }
   .field-row.two { grid-template-columns: 1fr 1fr; }
-  .field-row.three { grid-template-columns: repeat(3, 1fr); }
   .field-row.five { grid-template-columns: 1.1fr 1fr 1fr 1fr 1fr; }
   .field { display: flex; flex-direction: column; gap: 3px; position: relative; }
-  .field label { font-size: 11px; color: #6e6e6e; }
+  .field label {
+    font-size: 10px; color: #888;
+    text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500;
+  }
   .field input, .field select {
-    height: 30px; padding: 0 8px; font-size: 13px;
-    background: #fff; border: 1px solid #e1e1e1; border-radius: 6px;
+    height: 34px; padding: 0 10px; font-size: 13px;
+    background: #fff; border: 1px solid #e1e1e1; border-radius: 7px;
     color: #1a1a1a; font-family: inherit; width: 100%;
     transition: border-color 0.12s, box-shadow 0.12s;
   }
@@ -41,14 +54,15 @@
     text-align: right; font-variant-numeric: tabular-nums;
   }
   .input-suffix { position: relative; }
-  .input-suffix input { padding-right: 26px; }
+  .input-suffix input { padding-right: 28px; }
   .input-suffix .suffix {
-    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-    font-size: 11px; color: #9b9b9b; pointer-events: none;
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    font-size: 12px; color: #9b9b9b; pointer-events: none;
   }
-  .search-box-wrap { position: relative; margin-bottom: 4px; }
+
+  .search-box-wrap { position: relative; }
   .search-box-wrap input#searchBox {
-    height: 40px; padding: 0 14px 0 38px; font-size: 13px;
+    height: 42px; padding: 0 14px 0 40px; font-size: 13px;
     background: #fff; border: 1.5px solid #d8d8d8; border-radius: 10px;
     color: #1a1a1a; font-family: inherit; width: 100%; transition: all 0.12s;
   }
@@ -56,26 +70,27 @@
     outline: none; border-color: #378ADD;
     box-shadow: 0 0 0 4px rgba(55, 138, 221, 0.12);
   }
-  .search-box-wrap input#searchBox::placeholder { color: #b8b8b8; font-size: 12px; }
   .search-icon {
-    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
     width: 16px; height: 16px; color: #9b9b9b; pointer-events: none;
   }
+
   .panel {
     background: #fff; border: 1px solid #ececec; border-radius: 12px;
-    padding: 12px 14px; margin-bottom: 10px;
+    padding: 14px 16px; margin-bottom: 12px;
   }
-  .br { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
-  .br + .br { border-top: 1px solid #f0f0f0; }
-  .br .pct { font-size: 11px; color: #9b9b9b; margin-left: 6px; }
-  .br.subtotal { font-weight: 500; padding: 8px 0; border-top: 1px solid #d8d8d8; }
-  .br.profit { font-size: 15px; font-weight: 500; padding: 10px 0 4px; border-top: 1px solid #d8d8d8; }
-  .stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-  .stat { background: #f7f7f5; border-radius: 8px; padding: 8px 10px; }
-  .stat-label { font-size: 11px; color: #6e6e6e; margin-bottom: 2px; }
-  .stat-value { font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
-  .ok { color: #137333; }
-  .bad { color: #B3261E; }
+
+  .selected-cat {
+    margin-top: 8px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    font-size: 12px; color: #555;
+  }
+  .selected-cat .group-tag {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+
   .suggest-list {
     position: absolute; top: 100%; left: 0; right: 0;
     max-height: 320px; overflow-y: auto;
@@ -101,37 +116,32 @@
   .gt-SK { background: #e6f4ea; color: #137333; }
   .gt-TH { background: #f3e5f5; color: #6a1b9a; }
   .suggest-item .pcts { font-size: 11px; color: #9b9b9b; margin-top: 3px; }
-  .selected-cat {
-    font-size: 12px; color: #185fa5; margin-top: 6px;
-    padding: 4px 10px; background: #e6f1fb; border-radius: 6px;
-    display: inline-block;
-  }
 
   /* Preset cards */
-  .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .preset-btn {
-    padding: 9px 11px; font-size: 12px; text-align: left;
+    padding: 11px 13px; text-align: left;
     background: #fff; border: 1.5px solid; border-radius: 10px;
     cursor: pointer; transition: all 0.12s;
     font-family: inherit; color: inherit;
-    display: flex; flex-direction: column; gap: 3px;
+    display: flex; flex-direction: column; gap: 4px;
   }
-  .preset-btn .preset-name { font-size: 13px; font-weight: 500; }
-  .preset-btn .preset-desc { font-size: 10px; opacity: 0.7; }
+  .preset-btn .preset-name { font-size: 14px; font-weight: 500; }
+  .preset-btn .preset-desc { font-size: 11px; opacity: 0.7; }
   .preset-btn .preset-profit {
-    font-size: 13px; font-weight: 500; padding: 5px 8px;
-    border-radius: 6px; margin-top: 2px;
+    font-size: 14px; font-weight: 600; padding: 6px 9px;
+    border-radius: 7px; margin-top: 4px;
     display: flex; justify-content: space-between; align-items: baseline; gap: 4px;
     font-variant-numeric: tabular-nums;
   }
-  .preset-btn .preset-profit .pct { font-size: 11px; opacity: 0.9; }
+  .preset-btn .preset-profit .pct { font-size: 12px; opacity: 0.92; font-weight: 500; }
   .preset-btn[data-preset="ls"]      { border-color: #B5D4F4; color: #185FA5; }
   .preset-btn[data-preset="lsads"]   { border-color: #9FE1CB; color: #0F6E56; }
   .preset-btn[data-preset="adsonly"] { border-color: #F5C4B3; color: #993C1D; }
   .preset-btn[data-preset="affonly"] { border-color: #CECBF6; color: #534AB7; }
   .preset-btn[data-preset="full"]    { border-color: #F7C1C1; color: #A32D2D; }
   .preset-btn[data-preset="xakho"]   { border-color: #D3D1C7; color: #5F5E5A; }
-  .preset-btn:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .preset-btn:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
   .preset-btn[data-preset="ls"].active      { background: #E6F1FB; border-color: #378ADD; }
   .preset-btn[data-preset="lsads"].active   { background: #E1F5EE; border-color: #1D9E75; }
   .preset-btn[data-preset="adsonly"].active { background: #FAECE7; border-color: #D85A30; }
@@ -139,38 +149,104 @@
   .preset-btn[data-preset="full"].active    { background: #FCEBEB; border-color: #E24B4A; }
   .preset-btn[data-preset="xakho"].active   { background: #F1EFE8; border-color: #888780; }
 
-  /* Profit color tones */
   .p-good { background: #E6F4EA; color: #137333; }
   .p-thin { background: #FFF8E1; color: #B05A00; }
   .p-warn { background: #F3E8FF; color: #6B21A8; }
-  .p-loss { background: #FCE8E6; color: #B3261E; font-weight: 600; }
+  .p-loss { background: #FCE8E6; color: #B3261E; }
   .loss-tag {
-    font-size: 9px; padding: 1px 5px; background: #B3261E; color: #fff;
-    border-radius: 3px; margin-left: 4px; letter-spacing: 0.05em;
-    font-weight: 500;
+    font-size: 10px; padding: 2px 6px; background: #B3261E; color: #fff;
+    border-radius: 3px; margin-left: 5px; letter-spacing: 0.05em;
+    font-weight: 600;
   }
 
   .legend-row {
-    display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px;
-    margin-top: 8px; padding-top: 8px;
+    display: flex; flex-wrap: wrap; gap: 14px; font-size: 11px;
+    margin-top: 12px; padding-top: 10px;
     border-top: 1px solid #f0f0f0; color: #6e6e6e;
   }
-  .legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
+  .legend-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: 1px; }
 
+  /* Right column — Phân tích chi tiết */
+  .panel-detail {
+    background: #fff; border: 1px solid #ececec; border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .panel-detail h2 {
+    font-size: 16px; font-weight: 500; margin: 0 0 14px;
+    color: #1a1a1a;
+  }
+  .br {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 6px 0; font-size: 13px;
+  }
+  .br + .br { border-top: 1px solid #f4f4f4; }
+  .br .label-text { color: #444; }
+  .br .pct {
+    display: inline-block; font-size: 10px; color: #888;
+    background: #f4f4f4; padding: 1px 6px; border-radius: 3px;
+    margin-left: 6px; font-weight: 500;
+  }
+  .br .val { font-variant-numeric: tabular-nums; color: #1a1a1a; }
+  .br.subtotal { font-weight: 500; padding: 9px 0; border-top: 1px solid #d8d8d8; }
+  .br.subtotal .val { font-weight: 500; }
+  .br.profit-final {
+    font-size: 17px; font-weight: 600; padding: 14px 0 4px;
+    border-top: 1px solid #d8d8d8; margin-top: 4px;
+  }
+  .br.profit-final .label-text { color: inherit; }
+
+  .stat-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    margin-top: 16px;
+  }
+  .stat {
+    border-radius: 10px; padding: 10px 12px;
+    background: #f7f7f5;
+  }
+  .stat-label {
+    font-size: 10px; color: #888; margin-bottom: 4px;
+    text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500;
+  }
+  .stat-value {
+    font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+  .stat-sub { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+
+  .stat.bg-revenue { background: #E6F1FB; color: #185FA5; }
+  .stat.bg-fee { background: #FFF8E1; color: #B05A00; }
+  .stat.bg-profit-good { background: #E6F4EA; color: #137333; }
+  .stat.bg-profit-loss { background: #FCE8E6; color: #B3261E; }
+
+  .footer {
+    text-align: center; font-size: 11px; color: #888;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid #f0f0f0;
+  }
+  .footer .app-name {
+    font-size: 13px; font-weight: 500; color: #444; margin-bottom: 4px;
+  }
+
+  .ok { color: #137333; }
+  .bad { color: #B3261E; }
+
+  @media (max-width: 1024px) {
+    .layout { grid-template-columns: 1fr; }
+    .col-right { position: static; }
+  }
   @media (max-width: 700px) {
+    body { padding: 10px; }
     .preset-grid { grid-template-columns: repeat(2, 1fr); }
     .stat-cards { grid-template-columns: 1fr; }
     .field-row.two { grid-template-columns: 1fr; }
-    .field-row.three { grid-template-columns: 1fr 1fr; }
     .field-row.five { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="layout">
 
-<h1>Tool tính lỗ lãi từng đơn</h1>
-<p class="subtitle">Toàn ngành (2.039 ngành cấp 3) • Lỗ Vũ / Velasboost / Levu01 • Cập nhật biểu phí 09/05/2026</p>
+<!-- ============== CỘT TRÁI ============== -->
+<div class="col-left">
 
 <!-- Panel 1: Giá & sản phẩm -->
 <div class="panel">
@@ -180,11 +256,11 @@
       <circle cx="11" cy="11" r="7"/>
       <path d="m21 21-4.3-4.3"/>
     </svg>
-    <input type="text" id="searchBox" placeholder="Tìm theo tên sản phẩm hoặc nhóm — VD: cáp sạc, áo thun, sữa rửa mặt..." autocomplete="off" />
+    <input type="text" id="searchBox" placeholder="Tìm ngành hàng — VD: cáp sạc, áo thun..." autocomplete="off" />
     <div class="suggest-list" id="suggestList" style="display:none"></div>
   </div>
   <div id="selectedCat" class="selected-cat"></div>
-  <div class="field-row two" style="margin-top: 10px;">
+  <div class="field-row two" style="margin-top: 12px;">
     <div class="field">
       <label>Giá vốn (đ)</label>
       <input type="text" inputmode="numeric" class="money" id="cost" value="80.000" />
@@ -226,7 +302,7 @@
   </div>
 </div>
 
-<!-- Panel 3: Chi phí kinh doanh & phí cố định — 5 ô -->
+<!-- Panel 3: Chi phí kinh doanh & cố định — 5 ô -->
 <div class="panel">
   <p class="section-title">Chi phí kinh doanh &amp; phí cố định</p>
   <div class="field-row five">
@@ -243,12 +319,12 @@
       <div class="input-suffix"><input type="number" id="ops" value="10" step="0.5" /><span class="suffix">%</span></div>
     </div>
     <div class="field">
-      <label>Xử lý đơn (đ)</label>
+      <label>Phí đơn (đ)</label>
       <input type="text" inputmode="numeric" class="money" id="proc" value="3.000" />
     </div>
     <div class="field">
-      <label>Hoàn phí VC (đ)</label>
-      <input type="text" inputmode="numeric" class="money" id="ship" value="6.179" />
+      <label>Hoàn VC (đ)</label>
+      <input type="text" inputmode="numeric" class="money" id="ship" value="2.650" />
     </div>
   </div>
 </div>
@@ -263,7 +339,7 @@
       <div class="preset-profit"></div>
     </button>
     <button class="preset-btn" data-preset="lsads">
-      <div class="preset-name">Livestream + Ads</div>
+      <div class="preset-name">LS + Ads</div>
       <div class="preset-desc">Ads 5% • AFF 0</div>
       <div class="preset-profit"></div>
     </button>
@@ -284,27 +360,49 @@
     </button>
     <button class="preset-btn" data-preset="xakho">
       <div class="preset-name">Xả kho</div>
-      <div class="preset-desc">Bỏ ads, AFF, vận hành</div>
+      <div class="preset-desc">Bỏ ads, AFF, VH</div>
       <div class="preset-profit"></div>
     </button>
   </div>
   <div class="legend-row">
     <span><span class="legend-dot" style="background:#137333;"></span>≥ 10% lãi tốt</span>
-    <span><span class="legend-dot" style="background:#B05A00;"></span>5–10% lãi mỏng</span>
-    <span><span class="legend-dot" style="background:#6B21A8;"></span>0–5% sát hoà vốn</span>
+    <span><span class="legend-dot" style="background:#B05A00;"></span>5–10% mỏng</span>
+    <span><span class="legend-dot" style="background:#6B21A8;"></span>0–5% sát HV</span>
     <span><span class="legend-dot" style="background:#B3261E;"></span>&lt; 0% lỗ</span>
   </div>
 </div>
 
-<!-- Panel 5: Phân tích chi tiết -->
-<div class="panel">
-  <p class="section-title">Phân tích chi tiết</p>
+</div>
+
+<!-- ============== CỘT PHẢI — PHÂN TÍCH CHI TIẾT ============== -->
+<div class="col-right">
+<div class="panel-detail">
+  <h2>Phân tích chi tiết</h2>
   <div id="breakdown"></div>
+
   <div class="stat-cards">
-    <div class="stat"><div class="stat-label">Tổng phí trên đơn</div><div class="stat-value" id="totalFee">—</div></div>
-    <div class="stat"><div class="stat-label">% phí / doanh thu</div><div class="stat-value" id="feePct">—</div></div>
-    <div class="stat"><div class="stat-label">Lợi nhuận thuần</div><div class="stat-value" id="profit">—</div></div>
+    <div class="stat bg-revenue">
+      <div class="stat-label">Doanh thu</div>
+      <div class="stat-value" id="totalRevenue">—</div>
+    </div>
+    <div class="stat bg-fee">
+      <div class="stat-label">Phí trên đơn</div>
+      <div class="stat-value" id="totalFee">—</div>
+      <div class="stat-sub" id="feePctSub">—</div>
+    </div>
+    <div class="stat" id="profitStat">
+      <div class="stat-label">Lợi nhuận thuần</div>
+      <div class="stat-value" id="profitVal">—</div>
+      <div class="stat-sub" id="profitPctSub">—</div>
+    </div>
   </div>
+
+  <div class="footer">
+    <div class="app-name">Ứng dụng tính giá bán lẻ TMĐT</div>
+    Full ngành (2.039 ngành cấp 3) • Update 09/05/2026<br>
+    Lỗ Vũ / Velasboost / Levu01
+  </div>
+</div>
 </div>
 
 </div>
@@ -403,8 +501,8 @@ function renderSuggest(query){
 
 function selectCat(idx){
   const r=INDEX[idx];
-  selectedCat.innerHTML=`<span class="group-tag gt-${r.g}">${GROUP_NAMES[r.g]}</span>${r.p}`;
-  selectedCat.style.display='inline-block';
+  selectedCat.innerHTML=`<span class="group-tag gt-${r.g}">${GROUP_NAMES[r.g]}</span><span>${r.p}</span>`;
+  selectedCat.style.display='flex';
   selectedCat.dataset.idx=idx;
   $('comm').value=$('shopType').value==='ma'?r.ma:r.tc;
   suggestList.style.display='none';
@@ -474,39 +572,47 @@ function calc(){
   const netProfit=grossProfit-totalFee;
   const feePctVal=p>0?(totalFee/p*100):0;
   const marginPct=p>0?(netProfit/p*100):0;
+  const procPct=p>0?(proc/p*100):0;
+  const shipPct=p>0?(ship/p*100):0;
 
-  // Update preset cards
   updatePresetCards(p, c, comm, txn, vxp, tax, proc, ship);
 
-  // Detail breakdown
+  // Breakdown rows: [label, value, pct_to_show, isMuted, cssClass]
   const rows=[
     ['Doanh thu (giá bán)',fmt(p),null,false,null],
     ['Giá vốn (COGS)','- '+fmt(c),null,true,null],
     ['Lãi gộp',fmt(grossProfit),null,false,'subtotal'],
-    ['Hoa hồng ngành','- '+fmt(feeComm),comm,false,null],
-    ['Phí giao dịch','- '+fmt(feeTxn),txn,false,null],
-    ['VXP','- '+fmt(feeVxp),vxp,false,null],
-    ['Hoa hồng affiliate','- '+fmt(feeAff),aff,false,null],
-    ['Thuế','- '+fmt(feeTax),tax,false,null],
-    ['Chi phí Ads','- '+fmt(feeAds),ads,false,null],
-    ['Chi phí vận hành','- '+fmt(feeOps),ops,false,null],
-    ['Phí xử lý đơn','- '+fmt(proc),null,false,null],
-    ['Hoàn phí vận chuyển','- '+fmt(ship),null,false,null]
+    ['Hoa hồng ngành','- '+fmt(feeComm),pctTxt(comm),false,null],
+    ['Phí giao dịch','- '+fmt(feeTxn),pctTxt(txn),false,null],
+    ['VXP','- '+fmt(feeVxp),pctTxt(vxp),false,null],
+    ['Hoa hồng affiliate','- '+fmt(feeAff),pctTxt(aff),false,null],
+    ['Thuế','- '+fmt(feeTax),pctTxt(tax),false,null],
+    ['Chi phí Ads','- '+fmt(feeAds),pctTxt(ads),false,null],
+    ['Chi phí vận hành','- '+fmt(feeOps),pctTxt(ops),false,null],
+    ['Phí xử lý đơn','- '+fmt(proc),pctTxt(procPct),false,null],
+    ['Hoàn phí VC','- '+fmt(ship),pctTxt(shipPct),false,null]
   ];
-  let html=rows.map(([label,val,p_pct,muted,cls])=>{
-    const pctSpan=p_pct!=null?`<span class="pct">${pctTxt(p_pct)}</span>`:'';
-    const valStyle=muted?'color:#6e6e6e;':'';
-    return `<div class="br ${cls||''}"><span>${label}${pctSpan}</span><span style="${valStyle}">${val}</span></div>`;
+  let html=rows.map(([label,val,pct,muted,cls])=>{
+    const pctSpan=pct!=null?`<span class="pct">${pct}</span>`:'';
+    const valClass=muted?'val' :'val';
+    const valStyle=muted?'color:#888;':'';
+    return `<div class="br ${cls||''}"><span class="label-text">${label}${pctSpan}</span><span class="val" style="${valStyle}">${val}</span></div>`;
   }).join('');
   const profCls=netProfit>=0?'ok':'bad';
-  html+=`<div class="br profit ${profCls}"><span>Lợi nhuận thuần</span><span>${fmt(netProfit)} • ${marginPct.toFixed(1)}%</span></div>`;
+  html+=`<div class="br profit-final ${profCls}"><span class="label-text">Lợi nhuận thuần</span><span class="val">${fmtSigned(netProfit)} • ${fmtPct(marginPct)}</span></div>`;
 
   $('breakdown').innerHTML=html;
+
+  // Stat cards
+  $('totalRevenue').textContent=fmt(p);
   $('totalFee').textContent=fmt(totalFee);
-  $('feePct').textContent=feePctVal.toFixed(1)+'%';
-  const pe=$('profit');
-  pe.textContent=fmt(netProfit);
-  pe.className='stat-value '+(netProfit>=0?'ok':'bad');
+  $('feePctSub').textContent=feePctVal.toFixed(1)+'%';
+
+  const profitStat=$('profitStat');
+  profitStat.classList.remove('bg-profit-good','bg-profit-loss');
+  profitStat.classList.add(netProfit>=0?'bg-profit-good':'bg-profit-loss');
+  $('profitVal').textContent=fmtSigned(netProfit);
+  $('profitPctSub').textContent=fmtPct(marginPct);
 }
 
 ['cost','price','proc','ship'].forEach(id=>attachMoneyHandler($(id)));
